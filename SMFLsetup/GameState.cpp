@@ -13,6 +13,7 @@ void GameState::init()
 	settings_.strum1 = sf::Keyboard::Key::Period;
 	settings_.strum2 = sf::Keyboard::Key::Slash;
 
+	this->genDots();
 
 	this->firstHitter_.setTexture(this->data_->assets.getTexture("1 hit off"));
 	this->firstHitter_.setPosition(float(WIN_RES.x / 12), float(WIN_RES.y * 8 / 10));
@@ -40,9 +41,9 @@ void GameState::init()
 	this->transitionSound_.setBuffer(this->data_->assets.getSound("TRANSITION"));
 	this->hitSound_.setBuffer(this->data_->assets.getSound("HITSOUND"));
 	this->hitSound_.setVolume(50.0f);
-	this->data_->songsData.getSong(this->songName_).music.play();
 	this->transitionSound_.play();
 	this->songClock_.restart();
+	this->data_->songsData.getSong(this->songName_).music.play();
 
 	this->scrollSpeed_ = 20 * this->data_->songsData.getSong(this->songName_).beatDuration;
 }
@@ -62,7 +63,6 @@ void GameState::handleInput()
 
 void GameState::update(float dt)
 {
-	this->genDots();
 	this->animateHitmarkers();
 	this->updateScore();
 	this->updateDots();
@@ -126,9 +126,9 @@ void GameState::animateHitmarkers()
 
 void GameState::updateScore()
 {
-	if (!this->dots_.empty())
+	if (!this->chart_.empty())
 	{
-		for (auto& dots : this->dots_) {
+		for (auto& dots : this->onScreen_) {
 			if (Collision::scoreCollision(dots[0].sprite, this->firstHitter_) && !dots[0].isHit && sf::Keyboard::isKeyPressed(settings_.hit1) && (sf::Keyboard::isKeyPressed(settings_.strum1) || sf::Keyboard::isKeyPressed(settings_.strum2)))
 			{
 				dots[0].isHit = true;
@@ -178,68 +178,58 @@ void GameState::updateScore()
 
 void GameState::genDots()
 {
-	if (this->songClock_.getElapsedTime().asSeconds() > this->data_->songsData.getSong(this->songName_).beatDuration)
+	for (auto i = 0; i < this->data_->songsData.getSong(this->songName_).chart.firstRow.size(); i++)
 	{
-		if (!this->data_->songsData.getSong(this->songName_).chart.firstRow.empty()) {
-			std::vector<Hitmarker> temp;
+		std::vector<Hitmarker> temp;
 
-			if (this->data_->songsData.getSong(this->songName_).chart.firstRow[0] == true) {
-				Hitmarker dot1(this->data_->assets.getTexture("1 dot"));
-				dot1.sprite.setPosition(float(WIN_RES.x / 12), 0);
-				temp.emplace_back(dot1);
-				this->data_->songsData.getSong(this->songName_).chart.firstRow.erase(this->data_->songsData.getSong(this->songName_).chart.firstRow.begin());
-			}
-			else
-			{
-				temp.emplace_back(Hitmarker(this->data_->assets.getTexture("EMPTYTEX")));
-				this->data_->songsData.getSong(this->songName_).chart.firstRow.erase(this->data_->songsData.getSong(this->songName_).chart.firstRow.begin());
-			}
-
-			if (this->data_->songsData.getSong(this->songName_).chart.secondRow[0] == true) {
-				Hitmarker dot2(this->data_->assets.getTexture("2 dot"));
-				dot2.sprite.setPosition(float(WIN_RES.x / 4), 0);
-				temp.emplace_back(dot2);
-				this->data_->songsData.getSong(this->songName_).chart.secondRow.erase(this->data_->songsData.getSong(this->songName_).chart.secondRow.begin());
-			}
-			else
-			{
-				temp.emplace_back(Hitmarker(this->data_->assets.getTexture("EMPTYTEX")));
-				this->data_->songsData.getSong(this->songName_).chart.secondRow.erase(this->data_->songsData.getSong(this->songName_).chart.secondRow.begin());
-			}
-
-			if (this->data_->songsData.getSong(this->songName_).chart.thirdRow[0] == true) {
-				Hitmarker dot3(this->data_->assets.getTexture("3 dot"));
-				dot3.sprite.setPosition(float(WIN_RES.x * 5 / 12), 0);
-				temp.emplace_back(dot3);
-				this->data_->songsData.getSong(this->songName_).chart.thirdRow.erase(this->data_->songsData.getSong(this->songName_).chart.thirdRow.begin());
-			}
-			else
-			{
-				temp.emplace_back(Hitmarker(this->data_->assets.getTexture("EMPTYTEX")));
-				this->data_->songsData.getSong(this->songName_).chart.thirdRow.erase(this->data_->songsData.getSong(this->songName_).chart.thirdRow.begin());
-			}
-
-			if (this->data_->songsData.getSong(this->songName_).chart.fourthRow[0] == true) {
-				Hitmarker dot4(this->data_->assets.getTexture("4 dot"));
-				dot4.sprite.setPosition(float(WIN_RES.x * 7 / 12), 0);
-				temp.emplace_back(dot4);
-				this->data_->songsData.getSong(this->songName_).chart.fourthRow.erase(this->data_->songsData.getSong(this->songName_).chart.fourthRow.begin());
-			}
-			else
-			{
-				temp.emplace_back(Hitmarker(this->data_->assets.getTexture("EMPTYTEX")));
-				this->data_->songsData.getSong(this->songName_).chart.fourthRow.erase(this->data_->songsData.getSong(this->songName_).chart.fourthRow.begin());
-			}
-
-			this->dots_.emplace_back(temp);
+		if (this->data_->songsData.getSong(this->songName_).chart.firstRow[i] == true) {
+			Hitmarker dot1(this->data_->assets.getTexture("1 dot"));
+			dot1.sprite.setPosition(float(WIN_RES.x / 12), -dot1.sprite.getGlobalBounds().height);
+			temp.emplace_back(dot1);
 		}
-		this->songClock_.restart();
+		else
+		{
+			temp.emplace_back(Hitmarker(this->data_->assets.getTexture("EMPTYTEX")));
+		}
+
+		if (this->data_->songsData.getSong(this->songName_).chart.secondRow[i] == true) {
+			Hitmarker dot2(this->data_->assets.getTexture("2 dot"));
+			dot2.sprite.setPosition(float(WIN_RES.x / 4), -dot2.sprite.getGlobalBounds().height);
+			temp.emplace_back(dot2);
+		}
+		else
+		{
+			temp.emplace_back(Hitmarker(this->data_->assets.getTexture("EMPTYTEX")));
+		}
+
+		if (this->data_->songsData.getSong(this->songName_).chart.thirdRow[i] == true) {
+			Hitmarker dot3(this->data_->assets.getTexture("3 dot"));
+			dot3.sprite.setPosition(float(WIN_RES.x * 5 / 12), -dot3.sprite.getGlobalBounds().height);
+			temp.emplace_back(dot3);
+		}
+		else
+		{
+			temp.emplace_back(Hitmarker(this->data_->assets.getTexture("EMPTYTEX")));
+		}
+
+		if (this->data_->songsData.getSong(this->songName_).chart.fourthRow[0] == true) {
+			Hitmarker dot4(this->data_->assets.getTexture("4 dot"));
+			dot4.sprite.setPosition(float(WIN_RES.x * 7 / 12), -dot4.sprite.getGlobalBounds().height);
+			temp.emplace_back(dot4);
+		}
+		else
+		{
+			temp.emplace_back(Hitmarker(this->data_->assets.getTexture("EMPTYTEX")));
+		}
+
+		this->chart_.emplace_back(temp);
 	}
 }
 
+
 void GameState::drawDots()
 {
-	for (const auto& i : this->dots_)
+	for (const auto& i : this->onScreen_)
 	{
 		for (const auto& j : i)
 		{
@@ -250,14 +240,21 @@ void GameState::drawDots()
 
 void GameState::updateDots()
 {
-	for (auto& i : this->dots_)
+	if (this->songClock_.getElapsedTime().asSeconds() > this->data_->songsData.getSong(this->songName_).beatDuration && !this->chart_.empty())
+	{
+		this->onScreen_.push_back(this->chart_[0]);
+		this->chart_.erase(this->chart_.begin());
+		this->songClock_.restart();
+	}
+
+	for (auto& i : this->onScreen_)
 	{
 		for (auto& j : i)
 		{
 			j.sprite.move(0, scrollSpeed_);
 			if (j.sprite.getPosition().y > WIN_RES.y)
 			{
-				this->dots_.erase(dots_.begin());
+				this->onScreen_.erase(onScreen_.begin());
 				break;
 			}
 		}

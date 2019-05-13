@@ -41,7 +41,7 @@ public:
 private:
 	GameDataRef data_;
 	DancerSprite dancer_;
-	std::vector<std::vector<Hitmarker>> dots_;
+	std::vector<std::vector<Hitmarker>> chart_, onScreen_;
 	sf::Sprite firstHitter_, secondHitter_, fourthHitter_, thirdHitter_;
 	sf::Text scoreText_, comboText_;
 	sf::Sound transitionSound_, hitSound_;
