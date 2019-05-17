@@ -1,12 +1,12 @@
 #pragma once
-#include <string>
-#include <memory>
-#include <SFML/Graphics.hpp>
 #include "GlobalConstants.hpp"
 #include "StateMaschine.h"
 #include "AssetManager.h"
 #include "InputManager.h"
 #include "SongsData.hpp"
+#include <string>
+#include <memory>
+#include <SFML/Graphics.hpp>
 
 struct GameData
 {

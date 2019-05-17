@@ -7,42 +7,33 @@ SplashState::SplashState(GameDataRef data) : data_(std::move(data)) {}
 
 void SplashState::init()
 {
-	this->data_->assets.loadTexture("SPLASHBACKGROUND", SPLASH_BG_PATH);
-	this->data_->assets.loadTexture("MENUBACKGROUND", MENU_BG_PATH);
+	data_->assets.loadTexture("SPLASHBACKGROUND", SPLASH_BG_PATH);
+	data_->assets.loadTexture("MENUBACKGROUND", MENU_BG_PATH);
 
-	this->data_->assets.loadTexture("BREAKDANCEBOI1", INTRO_BOI_1_SPRITE_PATH);
-	this->data_->assets.loadTexture("BREAKDANCEBOI2", INTRO_BOI_2_SPRITE_PATH);
-	this->data_->assets.loadTexture("HANDSUPBOI1", SONG1_BOI_1_SPRITE_PATH);
-	this->data_->assets.loadTexture("HANDSUPBOI2", SONG1_BOI_2_SPRITE_PATH);
+	data_->assets.loadTexture("BREAKDANCEBOI1", INTRO_BOI_1_SPRITE_PATH);
+	data_->assets.loadTexture("BREAKDANCEBOI2", INTRO_BOI_2_SPRITE_PATH);
+	data_->assets.loadTexture("HANDSUPBOI1", SONG1_BOI_1_SPRITE_PATH);
+	data_->assets.loadTexture("HANDSUPBOI2", SONG1_BOI_2_SPRITE_PATH);
 
-	this->data_->assets.loadTexture("1 hit off", HIT1_OFF_PATH);
-	this->data_->assets.loadTexture("1 hit on", HIT1_ON_PATH);
-	this->data_->assets.loadTexture("2 hit off", HIT2_OFF_PATH);
-	this->data_->assets.loadTexture("2 hit on", HIT2_ON_PATH);
-	this->data_->assets.loadTexture("3 hit off", HIT3_OFF_PATH);
-	this->data_->assets.loadTexture("3 hit on", HIT3_ON_PATH);
-	this->data_->assets.loadTexture("4 hit off", HIT4_OFF_PATH);
-	this->data_->assets.loadTexture("4 hit on", HIT4_ON_PATH);
+	data_->assets.loadTexture("hit on", HIT_ON_PATH);
+	data_->assets.loadTexture("hit off", HIT_OFF_PATH);
 
-	this->data_->assets.loadTexture("1 dot", DOT1_PATH);
-	this->data_->assets.loadTexture("2 dot", DOT2_PATH);
-	this->data_->assets.loadTexture("3 dot", DOT3_PATH);
-	this->data_->assets.loadTexture("4 dot", DOT4_PATH);
+	data_->assets.loadTexture("dot", DOT_PATH);
 
 
-	this->data_->assets.loadTexture("EMPTYTEX", EMPTY_TEX_PATH);
-	this->data_->assets.loadFont("AIRFONT", AIR_FONT_PATH);
-	this->data_->assets.loadSound("TRANSITION", TRANSITION_SOUND_PATH);
-	this->data_->assets.loadSound("HITSOUND", HIT_SOUND_PATH);
+	data_->assets.loadTexture("EMPTYTEX", EMPTY_TEX_PATH);
+	data_->assets.loadFont("MAIN", MAIN_FONT_PATH);
+	data_->assets.loadSound("TRANSITION", TRANSITION_SOUND_PATH);
+	data_->assets.loadSound("HITSOUND", HIT_SOUND_PATH);
 
-	this->background_.setTexture(this->data_->assets.getTexture("SPLASHBACKGROUND"));
+	background_.setTexture(data_->assets.getTexture("SPLASHBACKGROUND"));
 
-	this->dancer_.sprite.setTexture(this->data_->assets.getTexture("BREAKDANCEBOI1"));
-	this->dancer_.sprite.setPosition(float(WIN_RES.x / 2) - this->dancer_.sprite.getGlobalBounds().width / 2, float(WIN_RES.y * 2 / 5));
+	dancer_.sprite.setTexture(data_->assets.getTexture("BREAKDANCEBOI1"));
+	dancer_.sprite.setPosition(float(WIN_RES.x / 2) - dancer_.sprite.getGlobalBounds().width / 2, float(WIN_RES.y * 2 / 5));
 
-	this->data_->backgroundMusic.openFromFile(SPLASH_MUSIC_PATH);
-	this->data_->backgroundMusic.setLoop(true);
-	this->data_->backgroundMusic.play();
+	data_->backgroundMusic.openFromFile(SPLASH_MUSIC_PATH);
+	data_->backgroundMusic.setLoop(true);
+	data_->backgroundMusic.play();
 }
 
 void SplashState::handleInput()
@@ -54,17 +45,17 @@ void SplashState::handleInput()
 		{
 			data_->window.close();
 		}
+
+		if (event.type == event.KeyPressed && event.key.code == sf::Keyboard::Space)
+		{
+			data_->maschine.addState(std::make_unique<MainMenuState>(data_), false);
+		}
 	}
 }
 
 void SplashState::update(float dt)
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
-	{
-		this->data_->maschine.addState(std::make_unique<MainMenuState>(this->data_), false);
-	}
-
-	this->dancer_.animate(this->data_, "BREAKDANCEBOI1", "BREAKDANCEBOI2", SPLASH_ANIMATION_DURATION);
+	dancer_.animate(this->data_, "BREAKDANCEBOI1", "BREAKDANCEBOI2", SPLASH_ANIMATION_DURATION);
 }
 
 void SplashState::draw(float dt)

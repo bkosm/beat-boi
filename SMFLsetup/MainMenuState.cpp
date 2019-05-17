@@ -7,18 +7,18 @@ MainMenuState::MainMenuState(GameDataRef data) : data_(std::move(data)) {}
 
 void MainMenuState::init()
 {
-	this->background_.setTexture(this->data_->assets.getTexture("MENUBACKGROUND"));
+	background_.setTexture(data_->assets.getTexture("MENUBACKGROUND"));
 
-	this->firstSongText_.setPosition(float(WIN_RES.x / 24), float(WIN_RES.y / 6));
-	this->firstSongText_.setString("SONG 1\nPOPSTARS - YGLisiu Remix");
-	this->firstSongText_.setFont(this->data_->assets.getFont("AIRFONT"));
-	this->firstSongText_.setFillColor(sf::Color::Black);
-	this->firstSongText_.setCharacterSize(40);
+	firstSongText_.setPosition(float(WIN_RES.x / 24), float(WIN_RES.y / 6));
+	firstSongText_.setString("SONG 1\nPOPSTARS\nYGLisiu Remix");
+	firstSongText_.setFont(data_->assets.getFont("MAIN"));
+	firstSongText_.setFillColor(sf::Color::Black);
+	firstSongText_.setCharacterSize(20);
 
-	this->sound_.setBuffer(this->data_->assets.getSound("TRANSITION"));
-	this->sound_.play();
+	sound_.setBuffer(data_->assets.getSound("TRANSITION"));
+	sound_.play();
 
-	this->data_->songsData.unloadSongs();
+	data_->songsData.unloadSongs();
 }
 
 void MainMenuState::handleInput()
@@ -36,12 +36,12 @@ void MainMenuState::handleInput()
 
 void MainMenuState::update(float dt)
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || this->data_->input.isTextClicked(this->firstSongText_, sf::Mouse::Left, this->data_->window))
+	if (data_->input.isTextClicked(firstSongText_, sf::Mouse::Left, data_->window))
 	{
 
-		this->data_->songsData.loadSong(POPSTARS_SONG);
-		this->data_->backgroundMusic.stop();
-		this->data_->maschine.addState(std::make_unique<GameState>(this->data_, POPSTARS_SONG), true);
+		data_->songsData.loadSong(POPSTARS_SONG);
+		data_->backgroundMusic.stop();
+		data_->maschine.addState(std::make_unique<GameState>(data_, POPSTARS_SONG), true);
 	}
 }
 

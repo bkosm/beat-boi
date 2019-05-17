@@ -5,7 +5,7 @@
 
 Game::Game(unsigned width, unsigned height, const std::string& title)
 {
-	data_->window.create(sf::VideoMode(width, height), title, sf::Style::Close);
+	data_->window.create(sf::VideoMode(width, height), title, sf::Style::Close | sf::Style::Fullscreen);
 	data_->maschine.addState(std::unique_ptr<State>(std::make_unique<SplashState>(data_)), false);
 
 	run();
@@ -46,8 +46,8 @@ void Game::run() const
 	}
 }
 
-void DancerSprite::animate(GameDataRef& gameData, const std::string& firstTextureName,
-	const std::string& secondTextureName, const float animationDuration)
+void DancerSprite::animate(GameDataRef & gameData, const std::string & firstTextureName,
+	const std::string & secondTextureName, const float animationDuration)
 {
 	if (this->clock.getElapsedTime().asSeconds() > animationDuration)
 	{
