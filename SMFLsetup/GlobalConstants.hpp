@@ -17,6 +17,10 @@ const std::string SPLASH_BG_PATH = "./resources/pictures/SplashScreen.png";
 const std::string SPLASH_MUSIC_PATH = "./resources/audio/SPLASH_MUSIC.wav";
 const std::string TRANSITION_SOUND_PATH = "./resources/audio/TRANSITION_SOUND.wav";
 const std::string HIT_SOUND_PATH = "./resources/audio/HIT_SOUND.wav";
+const std::string KICK_PATH = "./resources/audio/kick.wav";
+const std::string CLAP_PATH = "./resources/audio/clap.wav";
+const std::string HAT_PATH = "./resources/audio/hat.wav";
+const std::string PERC_PATH = "./resources/audio/perc.wav";
 
 const std::string MAIN_FONT_PATH = "./resources/fonts/zerovelo.ttf";
 const std::string MENU_BG_PATH = "./resources/pictures/MenuScreen.png";

@@ -25,6 +25,10 @@ void SplashState::init()
 	data_->assets.loadFont("MAIN", MAIN_FONT_PATH);
 	data_->assets.loadSound("TRANSITION", TRANSITION_SOUND_PATH);
 	data_->assets.loadSound("HITSOUND", HIT_SOUND_PATH);
+	data_->assets.loadSound("KICK", KICK_PATH);
+	data_->assets.loadSound("CLAP", CLAP_PATH);
+	data_->assets.loadSound("HAT", HAT_PATH);
+	data_->assets.loadSound("PERC", PERC_PATH);
 
 	background_.setTexture(data_->assets.getTexture("SPLASHBACKGROUND"));
 
