@@ -169,7 +169,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssetManager.cpp" />
-    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="EndGameState.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameState.cpp" />
@@ -188,20 +187,19 @@
     <ClCompile Include="StateMaschine.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AssetManager.h" />
-    <ClInclude Include="Collision.hpp" />
-    <ClInclude Include="EndGameState.h" />
-    <ClInclude Include="Game.h" />
+    <ClInclude Include="AssetManager.hpp" />
+    <ClInclude Include="EndGameState.hpp" />
+    <ClInclude Include="Game.hpp" />
     <ClInclude Include="GameState.hpp" />
     <ClInclude Include="GlobalConstants.hpp" />
-    <ClInclude Include="InputManager.h" />
+    <ClInclude Include="InputManager.hpp" />
     <ClInclude Include="MainMenuState.hpp" />
     <ClInclude Include="PauseState.hpp" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="SongsData.hpp" />
-    <ClInclude Include="SplashState.h" />
-    <ClInclude Include="State.h" />
-    <ClInclude Include="StateMaschine.h" />
+    <ClInclude Include="SplashState.hpp" />
+    <ClInclude Include="State.hpp" />
+    <ClInclude Include="StateMaschine.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

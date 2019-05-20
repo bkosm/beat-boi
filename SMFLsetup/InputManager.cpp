@@ -1,6 +1,4 @@
 #include "pch.h"
-#include "InputManager.h"
-#include <SFML/Graphics.hpp>
 
 bool InputManager::isSpriteClicked(const sf::Sprite& object, const sf::Mouse::Button& button,
 	const sf::RenderWindow& window) const
@@ -37,4 +35,14 @@ bool InputManager::isTextClicked(const sf::Text& object, const sf::Mouse::Button
 sf::Vector2i InputManager::getMousePosition(const sf::RenderWindow& window) const
 {
 	return sf::Mouse::getPosition(window);
+}
+
+bool InputManager::scoreCollision(const sf::Sprite& first, const sf::Sprite& second)
+{
+	if (second.getGlobalBounds().contains(first.getPosition().x, first.getPosition().y - first.getGlobalBounds().height))
+	{
+		return true;
+	}
+
+	return false;
 }

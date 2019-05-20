@@ -1,20 +1,9 @@
 #include "pch.h"
-#include "GameState.hpp"
-#include "Collision.hpp"
-#include "PauseState.hpp"
-#include "EndGameState.h"
 
 GameState::GameState(GameDataRef data, std::string songName) : data_(std::move(data)), songName_(std::move(songName)) {}
 
 void GameState::init()
 {
-	settings_.hit1 = sf::Keyboard::Key::Z;
-	settings_.hit2 = sf::Keyboard::Key::X;
-	settings_.hit3 = sf::Keyboard::Key::C;
-	settings_.hit4 = sf::Keyboard::Key::V;
-	settings_.strum1 = sf::Keyboard::Key::Period;
-	settings_.strum2 = sf::Keyboard::Key::Slash;
-
 	genDots_();
 
 	firstHitter_.setTexture(data_->assets.getTexture("hit off"));
@@ -41,14 +30,18 @@ void GameState::init()
 	dancer_.sprite.setPosition(float(WIN_RES.x * 8.5 / 10) - dancer_.sprite.getGlobalBounds().width / 2, float(WIN_RES.y / 2));
 
 	transitionSound_.setBuffer(data_->assets.getSound("TRANSITION"));
-	hitSound_.setBuffer(data_->assets.getSound("HITSOUND"));
-	//hitSound_.setVolume(50.0f);
 	transitionSound_.play();
+
+	kickSound_.setBuffer(data_->songsData.getSong(songName_).sfx.kick);
+	clapSound_.setBuffer(data_->songsData.getSong(songName_).sfx.clap);
+	hatSound_.setBuffer(data_->songsData.getSong(songName_).sfx.hat);
+	percSound_.setBuffer(data_->songsData.getSong(songName_).sfx.perc);
+
 	songClock_.restart();
 	gameClock_.restart();
 	data_->songsData.getSong(songName_).music.play();
 
-	scrollSpeed_ = 25 * data_->songsData.getSong(songName_).beatDuration;
+	scrollSpeed_ = 10;
 	musicDuration_ = data_->songsData.getSong(songName_).music.getDuration().asSeconds();
 }
 
@@ -66,10 +59,10 @@ void GameState::handleInput()
 		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Key::Escape)
 		{
 			data_->songsData.getSong(songName_).music.pause();
-			data_->maschine.addState(std::make_unique<PauseState>(data_), false);
+			data_->maschine.addState(std::make_unique<PauseState>(data_), true);
 		}
 
-		if (event.type == sf::Event::KeyReleased && (event.key.code == settings_.strum1 || event.key.code == settings_.strum2))
+		if (event.type == sf::Event::KeyPressed && (event.key.code == data_->settings.strum1 || event.key.code == data_->settings.strum2))
 		{
 			strumOn_ = true;
 		}
@@ -78,11 +71,6 @@ void GameState::handleInput()
 
 void GameState::update(float dt)
 {
-	if (data_->songsData.getSong(songName_).music.getStatus() == sf::SoundSource::Status::Paused)
-	{
-		data_->songsData.getSong(songName_).music.play();
-	}
-
 	if (gameClock_.getElapsedTime().asSeconds() > musicDuration_)
 	{
 		data_->maschine.addState(std::make_unique<EndGameState>(data_), true);
@@ -111,86 +99,43 @@ void GameState::draw(float dt)
 	data_->window.display();
 }
 
-void GameState::animateHitmarkers_()
-{
-	if (sf::Keyboard::isKeyPressed(settings_.hit1))
-	{
-		firstHitter_.setTexture(data_->assets.getTexture("hit on"));
-	}
-	else
-	{
-		firstHitter_.setTexture(data_->assets.getTexture("hit off"));
-	}
-
-	if (sf::Keyboard::isKeyPressed(settings_.hit2))
-	{
-		secondHitter_.setTexture(data_->assets.getTexture("hit on"));
-	}
-	else
-	{
-		secondHitter_.setTexture(data_->assets.getTexture("hit off"));
-	}
-
-	if (sf::Keyboard::isKeyPressed(settings_.hit3))
-	{
-		thirdHitter_.setTexture(data_->assets.getTexture("hit on"));
-	}
-	else
-	{
-		thirdHitter_.setTexture(data_->assets.getTexture("hit off"));
-	}
-
-	if (sf::Keyboard::isKeyPressed(settings_.hit4))
-	{
-		fourthHitter_.setTexture(data_->assets.getTexture("hit on"));
-	}
-	else
-	{
-		fourthHitter_.setTexture(data_->assets.getTexture("hit off"));
-	}
-}
-
 void GameState::updateScore_()
 {
 	if (!chart_.empty())
 	{
 		for (auto& dots : onScreen_) {
 			int currentScore = 0;
-			if (Collision::scoreCollision(dots[0].sprite, firstHitter_) && !dots[0].isHit && !dots[0].hasEmptyTex() && sf::Keyboard::isKeyPressed(settings_.hit1) && strumOn_)
+			if (InputManager::scoreCollision(dots[0].sprite, firstHitter_) && !dots[0].isHit && !dots[0].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit1) && strumOn_)
 			{
 				dots[0].isHit = true;
 				dots[0].sprite.setTexture(data_->assets.getTexture("EMPTYTEX"));
 				currentScore += 5 + combo_;
 				combo_++;
-				hitSound_.setBuffer(data_->assets.getSound("KICK"));
-				hitSound_.play();
+				kickSound_.play();
 			}
-			if (Collision::scoreCollision(dots[1].sprite, secondHitter_) && !dots[1].isHit && !dots[1].hasEmptyTex() && sf::Keyboard::isKeyPressed(settings_.hit2) && strumOn_)
+			if (InputManager::scoreCollision(dots[1].sprite, secondHitter_) && !dots[1].isHit && !dots[1].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit2) && strumOn_)
 			{
 				dots[1].isHit = true;
 				dots[1].sprite.setTexture(data_->assets.getTexture("EMPTYTEX"));
 				currentScore += 5 + combo_;
 				combo_++;
-				hitSound_.setBuffer(data_->assets.getSound("CLAP"));
-				hitSound_.play();
+				clapSound_.play();
 			}
-			if (Collision::scoreCollision(dots[2].sprite, thirdHitter_) && !dots[2].isHit && !dots[2].hasEmptyTex() && sf::Keyboard::isKeyPressed(settings_.hit3) && strumOn_)
+			if (InputManager::scoreCollision(dots[2].sprite, thirdHitter_) && !dots[2].isHit && !dots[2].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit3) && strumOn_)
 			{
 				dots[2].isHit = true;
 				dots[2].sprite.setTexture(data_->assets.getTexture("EMPTYTEX"));
 				currentScore += 5 + combo_;
 				combo_++;
-				hitSound_.setBuffer(data_->assets.getSound("HAT"));
-				hitSound_.play();
+				hatSound_.play();
 			}
-			if (Collision::scoreCollision(dots[3].sprite, fourthHitter_) && !dots[3].isHit && !dots[3].hasEmptyTex() && sf::Keyboard::isKeyPressed(settings_.hit4) && strumOn_)
+			if (InputManager::scoreCollision(dots[3].sprite, fourthHitter_) && !dots[3].isHit && !dots[3].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit4) && strumOn_)
 			{
 				dots[3].isHit = true;
 				dots[3].sprite.setTexture(data_->assets.getTexture("EMPTYTEX"));
 				currentScore += 5 + combo_;
 				combo_++;
-				hitSound_.setBuffer(data_->assets.getSound("PERC"));
-				hitSound_.play();
+				percSound_.play();
 			}
 			score_ += currentScore;
 			strumOn_ = false;
@@ -211,7 +156,7 @@ void GameState::updateScore_()
 
 void GameState::genDots_()
 {
-	for (auto i = 0; i < data_->songsData.getSong(songName_).chart.firstRow.size(); i++)
+	for (unsigned i = 0; i < data_->songsData.getSong(songName_).chart.firstRow.size(); i++)
 	{
 		std::vector<Hitmarker> temp;
 
@@ -283,9 +228,9 @@ void GameState::updateDots_()
 {
 	if (songClock_.getElapsedTime().asSeconds() > data_->songsData.getSong(songName_).beatDuration && !chart_.empty())
 	{
-		onScreen_.push_back(chart_[0]);
-		chart_.erase(chart_.begin());
 		songClock_.restart();
+		onScreen_.emplace_back(chart_[0]);
+		chart_.erase(chart_.begin());
 	}
 
 	for (auto& i : onScreen_)
@@ -302,10 +247,48 @@ void GameState::updateDots_()
 						this->combo_ = 0;
 					}
 				}
-
 				onScreen_.erase(onScreen_.begin());
 				break;
 			}
 		}
+	}
+}
+
+void GameState::animateHitmarkers_()
+{
+	if (sf::Keyboard::isKeyPressed(data_->settings.hit1))
+	{
+		firstHitter_.setTexture(data_->assets.getTexture("hit on"));
+	}
+	else
+	{
+		firstHitter_.setTexture(data_->assets.getTexture("hit off"));
+	}
+
+	if (sf::Keyboard::isKeyPressed(data_->settings.hit2))
+	{
+		secondHitter_.setTexture(data_->assets.getTexture("hit on"));
+	}
+	else
+	{
+		secondHitter_.setTexture(data_->assets.getTexture("hit off"));
+	}
+
+	if (sf::Keyboard::isKeyPressed(data_->settings.hit3))
+	{
+		thirdHitter_.setTexture(data_->assets.getTexture("hit on"));
+	}
+	else
+	{
+		thirdHitter_.setTexture(data_->assets.getTexture("hit off"));
+	}
+
+	if (sf::Keyboard::isKeyPressed(data_->settings.hit4))
+	{
+		fourthHitter_.setTexture(data_->assets.getTexture("hit on"));
+	}
+	else
+	{
+		fourthHitter_.setTexture(data_->assets.getTexture("hit off"));
 	}
 }

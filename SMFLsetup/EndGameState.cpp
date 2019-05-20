@@ -1,8 +1,4 @@
 #include "pch.h"
-#include "PauseState.hpp"
-#include <utility>
-#include "EndGameState.h"
-#include "MainMenuState.hpp"
 
 EndGameState::EndGameState(GameDataRef data) : data_(std::move(data)) {}
 

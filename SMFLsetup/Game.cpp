@@ -1,11 +1,8 @@
 #include "pch.h"
-#include "Game.h"
-#include "SplashState.h"
-#include <random>
 
 Game::Game(unsigned width, unsigned height, const std::string& title)
 {
-	data_->window.create(sf::VideoMode(width, height), title, sf::Style::Close | sf::Style::Fullscreen);
+	data_->window.create(sf::VideoMode(width, height), title, sf::Style::Close);
 	data_->maschine.addState(std::unique_ptr<State>(std::make_unique<SplashState>(data_)), false);
 
 	run();

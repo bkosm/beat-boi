@@ -1,5 +1,4 @@
 #include "pch.h"
-#include "GlobalConstants.hpp"
 
 int main()
 {

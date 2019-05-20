@@ -1,13 +1,9 @@
 #pragma once
 
-#include "State.h"
-#include "Game.h"
-#include "SFML/Graphics.hpp"
-
-class EndGameState : public State
+class SplashState : public State
 {
 public:
-	EndGameState(GameDataRef data);
+	SplashState(GameDataRef data);
 
 	void init() override;
 	void handleInput() override;
@@ -16,4 +12,9 @@ public:
 
 private:
 	GameDataRef data_;
+	DancerSprite dancer_;
+
+	sf::Clock clock_;
+	sf::Sprite background_;
+	sf::Music music_;
 };

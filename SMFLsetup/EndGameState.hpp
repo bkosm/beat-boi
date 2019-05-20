@@ -1,9 +1,9 @@
 #pragma once
 
-class MainMenuState : public State
+class EndGameState : public State
 {
 public:
-	MainMenuState(GameDataRef data);
+	EndGameState(GameDataRef data);
 
 	void init() override;
 	void handleInput() override;
@@ -12,9 +12,4 @@ public:
 
 private:
 	GameDataRef data_;
-
-	sf::Sprite background_;
-	sf::Text firstSongText_;
-	sf::Sound sound_;
-	sf::Music music_;
 };

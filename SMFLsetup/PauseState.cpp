@@ -1,15 +1,13 @@
 #include "pch.h"
-#include "PauseState.hpp"
-#include <utility>
 
 PauseState::PauseState(GameDataRef data) : data_(std::move(data)) {}
 
 void PauseState::init()
 {
-	resume_.setFont(data_->assets.getFont("AIRFONT"));
-	resume_.setPosition(WIN_RES.x - resume_.getGlobalBounds().width / 2, WIN_RES.y / 2);
-	resume_.setFillColor(sf::Color::Black);
-	resume_.setCharacterSize(60);
+	restart_.setFont(data_->assets.getFont("MAIN"));
+	restart_.setPosition(float(WIN_RES.x - restart_.getGlobalBounds().width / 2), float(WIN_RES.y / 2));
+	restart_.setFillColor(sf::Color::Black);
+	restart_.setCharacterSize(60);
 }
 
 void PauseState::handleInput()
@@ -25,7 +23,7 @@ void PauseState::handleInput()
 
 		if (event.type == event.KeyPressed && event.key.code == sf::Keyboard::Escape)
 		{
-			data_->maschine.removeState();
+			data_->maschine.addState(std::make_unique<EndGameState>(data_), true);
 		}
 	}
 }
@@ -37,6 +35,6 @@ void PauseState::update(float dt)
 void PauseState::draw(float dt)
 {
 	data_->window.clear(sf::Color(227, 0, 100));
-	data_->window.draw(resume_);
+	data_->window.draw(restart_);
 	data_->window.display();
 }

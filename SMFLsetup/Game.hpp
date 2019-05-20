@@ -1,12 +1,37 @@
 #pragma once
-#include "GlobalConstants.hpp"
-#include "StateMaschine.h"
-#include "AssetManager.h"
-#include "InputManager.h"
+#include "StateMaschine.hpp"
+#include "AssetManager.hpp"
+#include "InputManager.hpp"
 #include "SongsData.hpp"
-#include <string>
-#include <memory>
-#include <SFML/Graphics.hpp>
+
+struct Settings
+{
+	sf::Keyboard::Key hit1, hit2, hit3, hit4, strum1, strum2;
+
+	Settings() = default;
+};
+
+struct Hitmarker
+{
+	sf::Sprite sprite;
+	bool isHit{};
+
+	Hitmarker() = default;
+	Hitmarker(const sf::Texture& texture, bool hit = false)
+	{
+		sprite.setTexture(texture);
+		isHit = hit;
+	}
+
+	bool hasEmptyTex() const
+	{
+		if (sprite.getTexture()->getSize().x == 1)
+		{
+			return true;
+		}
+		return false;
+	}
+};
 
 struct GameData
 {
@@ -15,9 +40,9 @@ struct GameData
 	AssetManager assets;
 	InputManager input;
 	SongsData songsData;
+	Settings settings;
 	sf::Music backgroundMusic;
 };
-
 
 typedef std::shared_ptr<GameData> GameDataRef;
 

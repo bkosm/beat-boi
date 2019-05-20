@@ -1,7 +1,6 @@
 #pragma once
-#include <memory>
+#include "State.hpp"
 #include <stack>
-#include "State.h"
 
 typedef std::unique_ptr<State> StateRef;
 

@@ -9,13 +9,31 @@
 #ifndef PCH_H
 #define PCH_H
 
-#include "Game.h"
 #include "SFML/Graphics.hpp"
 #include "SFML/Audio.hpp"
+
+#include "GlobalConstants.hpp"
+
+#include "Game.hpp"
+#include "State.hpp"
+#include "StateMaschine.hpp"
+#include "AssetManager.hpp"
+#include "InputManager.hpp"
+#include "SongsData.hpp"
+
+#include "SplashState.hpp"
+#include "MainMenuState.hpp"
+#include "GameState.hpp"
+#include "PauseState.hpp"
+#include "EndGameState.hpp"
+
 #include <utility>
 #include <vector>
 #include <map>
+#include <memory>
 #include <string>
-#include <iostream>
+#include <stack>
+#include <random>
+#include <fstream>
 
 #endif //PCH_H

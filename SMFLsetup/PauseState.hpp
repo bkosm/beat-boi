@@ -1,9 +1,5 @@
 #pragma once
 
-#include "State.h"
-#include "Game.h"
-#include "SFML/Graphics.hpp"
-
 class PauseState : public State
 {
 public:
@@ -17,5 +13,5 @@ public:
 private:
 	GameDataRef data_;
 
-	sf::Text resume_;
+	sf::Text restart_;
 };

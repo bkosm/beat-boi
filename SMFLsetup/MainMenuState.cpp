@@ -1,7 +1,4 @@
 #include "pch.h"
-#include "MainMenuState.hpp"
-#include "GameState.hpp"
-#include <utility>
 
 MainMenuState::MainMenuState(GameDataRef data) : data_(std::move(data)) {}
 

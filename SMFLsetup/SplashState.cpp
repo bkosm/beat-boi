@@ -1,12 +1,16 @@
 #include "pch.h"
-#include "GlobalConstants.hpp"
-#include "MainMenuState.hpp"
-#include "SplashState.h"
 
 SplashState::SplashState(GameDataRef data) : data_(std::move(data)) {}
 
 void SplashState::init()
 {
+	data_->settings.hit1 = sf::Keyboard::Key::Z;
+	data_->settings.hit2 = sf::Keyboard::Key::X;
+	data_->settings.hit3 = sf::Keyboard::Key::C;
+	data_->settings.hit4 = sf::Keyboard::Key::V;
+	data_->settings.strum1 = sf::Keyboard::Key::Period;
+	data_->settings.strum2 = sf::Keyboard::Key::Slash;
+
 	data_->assets.loadTexture("SPLASHBACKGROUND", SPLASH_BG_PATH);
 	data_->assets.loadTexture("MENUBACKGROUND", MENU_BG_PATH);
 
@@ -20,15 +24,9 @@ void SplashState::init()
 
 	data_->assets.loadTexture("dot", DOT_PATH);
 
-
 	data_->assets.loadTexture("EMPTYTEX", EMPTY_TEX_PATH);
 	data_->assets.loadFont("MAIN", MAIN_FONT_PATH);
 	data_->assets.loadSound("TRANSITION", TRANSITION_SOUND_PATH);
-	data_->assets.loadSound("HITSOUND", HIT_SOUND_PATH);
-	data_->assets.loadSound("KICK", KICK_PATH);
-	data_->assets.loadSound("CLAP", CLAP_PATH);
-	data_->assets.loadSound("HAT", HAT_PATH);
-	data_->assets.loadSound("PERC", PERC_PATH);
 
 	background_.setTexture(data_->assets.getTexture("SPLASHBACKGROUND"));
 

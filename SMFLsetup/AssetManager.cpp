@@ -1,6 +1,4 @@
 #include "pch.h"
-#include "AssetManager.h"
-#include <SFML/Graphics.hpp>
 
 void AssetManager::loadTexture(const std::string& name, const std::string& filename)
 {
