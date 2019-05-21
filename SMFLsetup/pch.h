@@ -23,6 +23,8 @@
 
 #include "SplashState.hpp"
 #include "MainMenuState.hpp"
+#include "OptionsState.hpp"
+#include "KeyBindingState.hpp"
 #include "GameState.hpp"
 #include "PauseState.hpp"
 #include "EndGameState.hpp"

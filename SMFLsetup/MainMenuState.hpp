@@ -13,8 +13,7 @@ public:
 private:
 	GameDataRef data_;
 
-	sf::Sprite background_;
-	sf::Text firstSongText_;
-	sf::Sound sound_;
-	sf::Music music_;
+	sf::Text uiText_, enteredText_, clrText_;
+	sf::RectangleShape textRect_;
+	sf::String stringEntered_;
 };

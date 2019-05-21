@@ -1,11 +1,11 @@
 #include "pch.h"
 
 bool InputManager::isSpriteClicked(const sf::Sprite& object, const sf::Mouse::Button& button,
-	const sf::RenderWindow& window) const
+	const sf::RenderWindow& window)
 {
 	if (sf::Mouse::isButtonPressed(button))
 	{
-		sf::IntRect tempRect(int(object.getPosition().x), int(object.getPosition().y), int(object.getGlobalBounds().width),
+		const sf::IntRect tempRect(int(object.getPosition().x), int(object.getPosition().y), int(object.getGlobalBounds().width),
 			int(object.getGlobalBounds().height));
 
 		if (tempRect.contains(sf::Mouse::getPosition(window)))
@@ -17,11 +17,11 @@ bool InputManager::isSpriteClicked(const sf::Sprite& object, const sf::Mouse::Bu
 }
 
 bool InputManager::isTextClicked(const sf::Text& object, const sf::Mouse::Button& button,
-	const sf::RenderWindow& window) const
+	const sf::RenderWindow& window)
 {
 	if (sf::Mouse::isButtonPressed(button))
 	{
-		sf::IntRect tempRect(int(object.getPosition().x), int(object.getPosition().y), int(object.getGlobalBounds().width),
+		const sf::IntRect tempRect(int(object.getPosition().x), int(object.getPosition().y), int(object.getGlobalBounds().width),
 			int(object.getGlobalBounds().height));
 
 		if (tempRect.contains(sf::Mouse::getPosition(window)))
@@ -32,7 +32,7 @@ bool InputManager::isTextClicked(const sf::Text& object, const sf::Mouse::Button
 	return false;
 }
 
-sf::Vector2i InputManager::getMousePosition(const sf::RenderWindow& window) const
+sf::Vector2i InputManager::getMousePosition(const sf::RenderWindow& window)
 {
 	return sf::Mouse::getPosition(window);
 }

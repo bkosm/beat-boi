@@ -1,5 +1,48 @@
 #include "pch.h"
 
+Settings::Settings()
+{
+	hit1 = sf::Keyboard::Key::Z;
+	hit2 = sf::Keyboard::Key::X;
+	hit3 = sf::Keyboard::Key::C;
+	hit4 = sf::Keyboard::Key::V;
+	strum1 = sf::Keyboard::Key::Period;
+	strum2 = sf::Keyboard::Key::Slash;
+	volumeUp = sf::Keyboard::Key::Equal;
+	volumeDown = sf::Keyboard::Key::Hyphen;
+	speedUp = sf::Keyboard::Key::RBracket;
+	speedDown = sf::Keyboard::Key::LBracket;
+}
+
+void Settings::resetKeyBindings()
+{
+	hit1 = sf::Keyboard::Key::Z;
+	hit2 = sf::Keyboard::Key::X;
+	hit3 = sf::Keyboard::Key::C;
+	hit4 = sf::Keyboard::Key::V;
+	strum1 = sf::Keyboard::Key::Period;
+	strum2 = sf::Keyboard::Key::Slash;
+	volumeUp = sf::Keyboard::Key::Equal;
+	volumeDown = sf::Keyboard::Key::Hyphen;
+	speedUp = sf::Keyboard::Key::RBracket;
+	speedDown = sf::Keyboard::Key::LBracket;
+}
+
+Hitmarker::Hitmarker(const sf::Texture& texture, bool hit)
+{
+	sprite.setTexture(texture);
+	isHit = hit;
+}
+
+bool Hitmarker::hasEmptyTex() const
+{
+	if (sprite.getTexture()->getSize().x == 1)
+	{
+		return true;
+	}
+	return false;
+}
+
 Game::Game(unsigned width, unsigned height, const std::string& title)
 {
 	data_->window.create(sf::VideoMode(width, height), title, sf::Style::Close);
@@ -43,8 +86,13 @@ void Game::run() const
 	}
 }
 
-void DancerSprite::animate(GameDataRef & gameData, const std::string & firstTextureName,
-	const std::string & secondTextureName, const float animationDuration)
+DancerSprite::DancerSprite()
+{
+	sprite.setTextureRect(frame);
+}
+
+void DancerSprite::animate(GameDataRef& gameData, const std::string& firstTextureName,
+	const std::string& secondTextureName, const float animationDuration)
 {
 	if (this->clock.getElapsedTime().asSeconds() > animationDuration)
 	{

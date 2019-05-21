@@ -37,12 +37,13 @@ void GameState::init()
 	hatSound_.setBuffer(data_->songsData.getSong(songName_).sfx.hat);
 	percSound_.setBuffer(data_->songsData.getSong(songName_).sfx.perc);
 
-	songClock_.restart();
-	gameClock_.restart();
-	data_->songsData.getSong(songName_).music.play();
-
 	scrollSpeed_ = 10;
 	musicDuration_ = data_->songsData.getSong(songName_).music.getDuration().asSeconds();
+
+	data_->songsData.getSong(songName_).music.play();
+
+	gameClock_.restart();
+	songClock_.restart();
 }
 
 void GameState::handleInput()
@@ -240,7 +241,7 @@ void GameState::updateDots_()
 			j.sprite.move(0, scrollSpeed_);
 			if (j.sprite.getPosition().y > WIN_RES.y)
 			{
-				for (auto& dot : *onScreen_.begin())
+				for (const auto& dot : *onScreen_.begin())
 				{
 					if (!dot.hasEmptyTex())
 					{

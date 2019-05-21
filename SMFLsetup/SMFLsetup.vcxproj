@@ -99,7 +99,7 @@
       <AdditionalIncludeDirectories>$(SFMLDirectory)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SFMLDirectory)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>$(SFMLLibrariesStaticDebug);$(SFMLDependencies);$(SFMLDirectory)lib\sfml-main-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -137,7 +137,7 @@
       <AdditionalIncludeDirectories>$(SFMLDirectory)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -173,7 +173,9 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="KeyBindingState.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
+    <ClCompile Include="OptionsState.cpp" />
     <ClCompile Include="PauseState.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -193,7 +195,9 @@
     <ClInclude Include="GameState.hpp" />
     <ClInclude Include="GlobalConstants.hpp" />
     <ClInclude Include="InputManager.hpp" />
+    <ClInclude Include="KeyBindingState.hpp" />
     <ClInclude Include="MainMenuState.hpp" />
+    <ClInclude Include="OptionsState.hpp" />
     <ClInclude Include="PauseState.hpp" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="SongsData.hpp" />

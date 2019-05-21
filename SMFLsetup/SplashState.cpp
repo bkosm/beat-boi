@@ -4,16 +4,6 @@ SplashState::SplashState(GameDataRef data) : data_(std::move(data)) {}
 
 void SplashState::init()
 {
-	data_->settings.hit1 = sf::Keyboard::Key::Z;
-	data_->settings.hit2 = sf::Keyboard::Key::X;
-	data_->settings.hit3 = sf::Keyboard::Key::C;
-	data_->settings.hit4 = sf::Keyboard::Key::V;
-	data_->settings.strum1 = sf::Keyboard::Key::Period;
-	data_->settings.strum2 = sf::Keyboard::Key::Slash;
-
-	data_->assets.loadTexture("SPLASHBACKGROUND", SPLASH_BG_PATH);
-	data_->assets.loadTexture("MENUBACKGROUND", MENU_BG_PATH);
-
 	data_->assets.loadTexture("BREAKDANCEBOI1", INTRO_BOI_1_SPRITE_PATH);
 	data_->assets.loadTexture("BREAKDANCEBOI2", INTRO_BOI_2_SPRITE_PATH);
 	data_->assets.loadTexture("HANDSUPBOI1", SONG1_BOI_1_SPRITE_PATH);
@@ -28,10 +18,27 @@ void SplashState::init()
 	data_->assets.loadFont("MAIN", MAIN_FONT_PATH);
 	data_->assets.loadSound("TRANSITION", TRANSITION_SOUND_PATH);
 
-	background_.setTexture(data_->assets.getTexture("SPLASHBACKGROUND"));
+	data_->transitionSound.setBuffer(data_->assets.getSound("TRANSITION"));
+	data_->transitionSound.setVolume(50.f);
 
 	dancer_.sprite.setTexture(data_->assets.getTexture("BREAKDANCEBOI1"));
 	dancer_.sprite.setPosition(float(WIN_RES.x / 2) - dancer_.sprite.getGlobalBounds().width / 2, float(WIN_RES.y * 2 / 5));
+
+	title_.setFont(data_->assets.getFont("MAIN"));
+	title_.setCharacterSize(90);
+	title_.setOutlineThickness(2.f);
+	title_.setFillColor(sf::Color::Black);
+	title_.setOutlineColor(sf::Color::White);
+	title_.setString("BeatBoi");
+	title_.setPosition(float(WIN_RES.x / 2) - title_.getGlobalBounds().width / 2, float(WIN_RES.y * 0.1));
+
+	enter_.setFont(data_->assets.getFont("MAIN"));
+	enter_.setCharacterSize(40);
+	enter_.setOutlineThickness(1.f);
+	enter_.setFillColor(sf::Color::White);
+	enter_.setOutlineColor(sf::Color::Black);
+	enter_.setString("Press Space to Play");
+	enter_.setPosition(float(WIN_RES.x / 2) - enter_.getGlobalBounds().width / 2, float(WIN_RES.y * 0.8));
 
 	data_->backgroundMusic.openFromFile(SPLASH_MUSIC_PATH);
 	data_->backgroundMusic.setLoop(true);
@@ -48,8 +55,9 @@ void SplashState::handleInput()
 			data_->window.close();
 		}
 
-		if (event.type == event.KeyPressed && event.key.code == sf::Keyboard::Space)
+		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space)
 		{
+			data_->transitionSound.play();
 			data_->maschine.addState(std::make_unique<MainMenuState>(data_), false);
 		}
 	}
@@ -57,13 +65,18 @@ void SplashState::handleInput()
 
 void SplashState::update(float dt)
 {
-	dancer_.animate(this->data_, "BREAKDANCEBOI1", "BREAKDANCEBOI2", SPLASH_ANIMATION_DURATION);
+	if (data_->backgroundMusic.getStatus() == sf::Music::Stopped)
+	{
+		data_->backgroundMusic.play();
+	}
+	dancer_.animate(this->data_, "BREAKDANCEBOI1", "BREAKDANCEBOI2", SPLASH_ANIMATION_DURATION * 0.25f);
 }
 
 void SplashState::draw(float dt)
 {
-	data_->window.clear(sf::Color::Magenta);
-	data_->window.draw(background_);
+	data_->window.clear(BG_COLOR);
+	data_->window.draw(title_);
+	data_->window.draw(enter_);
 	data_->window.draw(dancer_.sprite);
 	data_->window.display();
 }

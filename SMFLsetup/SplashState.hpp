@@ -14,7 +14,6 @@ private:
 	GameDataRef data_;
 	DancerSprite dancer_;
 
-	sf::Clock clock_;
-	sf::Sprite background_;
 	sf::Music music_;
+	sf::Text title_, enter_;
 };

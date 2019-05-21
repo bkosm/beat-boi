@@ -6,9 +6,10 @@
 
 struct Settings
 {
-	sf::Keyboard::Key hit1, hit2, hit3, hit4, strum1, strum2;
+	sf::Keyboard::Key hit1, hit2, hit3, hit4, strum1, strum2, speedUp, speedDown, volumeUp, volumeDown;
 
-	Settings() = default;
+	Settings();
+	void resetKeyBindings();
 };
 
 struct Hitmarker
@@ -17,20 +18,8 @@ struct Hitmarker
 	bool isHit{};
 
 	Hitmarker() = default;
-	Hitmarker(const sf::Texture& texture, bool hit = false)
-	{
-		sprite.setTexture(texture);
-		isHit = hit;
-	}
-
-	bool hasEmptyTex() const
-	{
-		if (sprite.getTexture()->getSize().x == 1)
-		{
-			return true;
-		}
-		return false;
-	}
+	Hitmarker(const sf::Texture& texture, bool hit = false);
+	bool hasEmptyTex() const;
 };
 
 struct GameData
@@ -42,6 +31,7 @@ struct GameData
 	SongsData songsData;
 	Settings settings;
 	sf::Music backgroundMusic;
+	sf::Sound transitionSound;
 };
 
 typedef std::shared_ptr<GameData> GameDataRef;
@@ -70,10 +60,6 @@ struct DancerSprite
 	sf::IntRect frame{ 0, 0, BOI_ANIMATION_HORIZONTAL, BOI_ANIMATION_VERTICAL };
 	bool isFirst = true;
 
-	DancerSprite()
-	{
-		sprite.setTextureRect(frame);
-	}
-
+	DancerSprite();
 	void animate(GameDataRef& gameData, const std::string& firstTextureName, const std::string& secondTextureName, float animationDuration);
 };

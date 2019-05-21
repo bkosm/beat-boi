@@ -1,6 +1,6 @@
 #pragma once
 
-const float SPLASH_ANIMATION_DURATION = 0.04411f;
+const float SPLASH_ANIMATION_DURATION = 60.0f / 155.0f;
 const float FRAMERATE = 1.f / 60.f;
 const float TEMPO_CORRECTION = 1.0f;
 
@@ -8,6 +8,8 @@ const int BOI_ANIMATION_HORIZONTAL = 700 / 4;
 const int BOI_ANIMATION_VERTICAL = 162;
 
 const sf::Vector2u WIN_RES{ 720,480 };
+
+const sf::Color BG_COLOR{ 184, 184, 148, 0 };
 
 const std::string INTRO_BOI_1_SPRITE_PATH = "./resources/pictures/dance1_1.png";
 const std::string INTRO_BOI_2_SPRITE_PATH = "./resources/pictures/dance1_2.png";

@@ -1,6 +1,6 @@
 #include "pch.h"
 
-void SongsData::loadSong(const std::string& songName)
+bool SongsData::loadSong(const std::string& songName)
 {
 	if (!songContainer_[songName].loaded)
 	{
@@ -35,6 +35,10 @@ void SongsData::loadSong(const std::string& songName)
 
 			input.close();
 		}
+		else
+		{
+			return false;
+		}
 
 		songContainer_[songName].music.openFromFile("./data/" + songName + "/music.wav");
 		songContainer_[songName].sfx.kick.loadFromFile("./data/" + songName + "/kick.wav");
@@ -47,6 +51,7 @@ void SongsData::loadSong(const std::string& songName)
 
 		songContainer_[songName].bpm *= TEMPO_CORRECTION;
 	}
+	return true;
 }
 
 void SongsData::unloadSongs()

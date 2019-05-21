@@ -26,7 +26,7 @@ public:
 	~SongsData() = default;
 
 	void unloadSongs();
-	void loadSong(const std::string& songName);
+	bool loadSong(const std::string& songName);
 	Song& getSong(const std::string& songName);
 
 private:
