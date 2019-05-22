@@ -32,11 +32,6 @@ bool InputManager::isTextClicked(const sf::Text& object, const sf::Mouse::Button
 	return false;
 }
 
-sf::Vector2i InputManager::getMousePosition(const sf::RenderWindow& window)
-{
-	return sf::Mouse::getPosition(window);
-}
-
 bool InputManager::scoreCollision(const sf::Sprite& first, const sf::Sprite& second)
 {
 	if (second.getGlobalBounds().contains(first.getPosition().x, first.getPosition().y - first.getGlobalBounds().height))

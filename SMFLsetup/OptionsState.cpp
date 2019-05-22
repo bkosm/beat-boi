@@ -1,8 +1,6 @@
 #include "pch.h"
 
-OptionsState::OptionsState(GameDataRef data, std::string songName) : data_(std::move(data)), songName_(std::move(songName)) {}
-
-void OptionsState::init()
+OptionsState::OptionsState(GameDataRef data, std::string songName) : data_(std::move(data)), songName_(std::move(songName))
 {
 	infoText_.setString("Is this the song that\nyou wanted to play?");
 	infoText_.setFont(data_->assets.getFont("MAIN"));
@@ -20,7 +18,7 @@ void OptionsState::init()
 	playText_.setOutlineColor(sf::Color::White);
 	playText_.setPosition(float(WIN_RES.x / 2 - playText_.getGlobalBounds().width / 2), float(WIN_RES.y * 0.5));
 	
-	optionsText_.setString("change key bindings");
+	optionsText_.setString("view key bindings");
 	optionsText_.setFont(data_->assets.getFont("MAIN"));
 	optionsText_.setCharacterSize(35);
 	optionsText_.setOutlineThickness(3.f);

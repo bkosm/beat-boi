@@ -5,7 +5,6 @@ class SplashState : public State
 public:
 	SplashState(GameDataRef data);
 
-	void init() override;
 	void handleInput() override;
 	void update(float dt) override;
 	void draw(float dt) override;

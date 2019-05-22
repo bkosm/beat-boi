@@ -1,8 +1,6 @@
 #include "pch.h"
 
-SplashState::SplashState(GameDataRef data) : data_(std::move(data)) {}
-
-void SplashState::init()
+SplashState::SplashState(GameDataRef data) : data_(std::move(data))
 {
 	data_->assets.loadTexture("BREAKDANCEBOI1", INTRO_BOI_1_SPRITE_PATH);
 	data_->assets.loadTexture("BREAKDANCEBOI2", INTRO_BOI_2_SPRITE_PATH);

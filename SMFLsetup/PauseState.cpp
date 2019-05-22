@@ -1,8 +1,6 @@
 #include "pch.h"
 
-PauseState::PauseState(GameDataRef data) : data_(std::move(data)) {}
-
-void PauseState::init()
+PauseState::PauseState(GameDataRef data) : data_(std::move(data))
 {
 	restart_.setFont(data_->assets.getFont("MAIN"));
 	restart_.setPosition(float(WIN_RES.x - restart_.getGlobalBounds().width / 2), float(WIN_RES.y / 2));

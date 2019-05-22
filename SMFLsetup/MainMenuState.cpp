@@ -1,8 +1,6 @@
 #include "pch.h"
 
-MainMenuState::MainMenuState(GameDataRef data) : data_(std::move(data)) {}
-
-void MainMenuState::init()
+MainMenuState::MainMenuState(GameDataRef data) : data_(std::move(data))
 {
 	uiText_.setString("Enter the name of a\nfolder containing\nthe song that\nyou want to play");
 	uiText_.setFont(data_->assets.getFont("MAIN"));

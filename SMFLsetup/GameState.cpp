@@ -1,8 +1,6 @@
 #include "pch.h"
 
-GameState::GameState(GameDataRef data, std::string songName) : data_(std::move(data)), songName_(std::move(songName)) {}
-
-void GameState::init()
+GameState::GameState(GameDataRef data, std::string songName) : data_(std::move(data)), songName_(std::move(songName))
 {
 	genDots_();
 

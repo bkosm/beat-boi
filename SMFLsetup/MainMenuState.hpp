@@ -5,7 +5,6 @@ class MainMenuState : public State
 public:
 	MainMenuState(GameDataRef data);
 
-	void init() override;
 	void handleInput() override;
 	void update(float dt) override;
 	void draw(float dt) override;

@@ -1,10 +1,7 @@
 #include "pch.h"
 
-EndGameState::EndGameState(GameDataRef data) : data_(std::move(data)) {}
-
-void EndGameState::init()
-{
-}
+EndGameState::EndGameState(GameDataRef data) : data_(std::move(data)) 
+{}
 
 void EndGameState::handleInput()
 {

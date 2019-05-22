@@ -5,7 +5,6 @@ class GameState : public State
 public:
 	GameState(GameDataRef data, std::string songName);
 
-	void init() override;
 	void handleInput() override;
 	void update(float dt) override;
 	void draw(float dt) override;

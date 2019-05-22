@@ -4,17 +4,6 @@ KeyBindingState::KeyBindingState(GameDataRef data) : data_(std::move(data))
 {
 }
 
-void KeyBindingState::init()
-{
-	infoText_.setString("Press on a button label and then\npress your desired key\nto change the setting.\nThen press ESC to return.");
-	infoText_.setFont(data_->assets.getFont("MAIN"));
-	infoText_.setCharacterSize(20);
-	infoText_.setOutlineThickness(1.f);
-	infoText_.setFillColor(sf::Color::White);
-	infoText_.setOutlineColor(sf::Color::Black);
-	infoText_.setPosition(float(WIN_RES.x * 0.01), float(WIN_RES.y * 0.01));
-}
-
 void KeyBindingState::handleInput()
 {
 	sf::Event event{};
@@ -40,7 +29,6 @@ void KeyBindingState::update(float dt)
 void KeyBindingState::draw(float dt)
 {
 	data_->window.clear(BG_COLOR);
-	data_->window.draw(infoText_);
-	for (auto& t : keyTexts_) data_->window.draw(t);
+	data_->window.draw(bg_);
 	data_->window.display();
 }

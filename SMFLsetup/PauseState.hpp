@@ -5,7 +5,6 @@ class PauseState : public State
 public:
 	PauseState(GameDataRef data);
 
-	void init() override;
 	void handleInput() override;
 	void update(float dt) override;
 	void draw(float dt) override;
