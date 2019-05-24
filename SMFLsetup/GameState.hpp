@@ -11,12 +11,11 @@ public:
 
 private:
 	GameDataRef data_;
-	DancerSprite dancer_;
 
 	std::vector<std::vector<Hitmarker>> chart_{}, onScreen_{};
-	sf::Sprite firstHitter_, secondHitter_, fourthHitter_, thirdHitter_;
+	sf::Sprite firstHitter_, secondHitter_, fourthHitter_, thirdHitter_, bg_;
 	sf::Text scoreText_, comboText_;
-	sf::Sound transitionSound_, kickSound_, clapSound_, hatSound_, percSound_;
+	sf::Sound kickSound_, clapSound_, hatSound_, percSound_;
 	sf::Clock songClock_, gameClock_;
 
 	std::string songName_;

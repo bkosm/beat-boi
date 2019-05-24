@@ -11,8 +11,6 @@ public:
 
 private:
 	GameDataRef data_;
-	DancerSprite dancer_;
 
-	sf::Music music_;
-	sf::Text title_, enter_;
+	sf::Sprite bg_;
 };

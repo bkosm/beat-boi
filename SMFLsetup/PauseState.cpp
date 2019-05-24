@@ -1,11 +1,16 @@
 #include "pch.h"
 
-PauseState::PauseState(GameDataRef data) : data_(std::move(data))
+PauseState::PauseState(GameDataRef data, std::string songName, const int score, const int maxCombo) : data_(std::move(data)), songName_(std::move(songName)), score_(score), maxCombo_(maxCombo)
 {
-	restart_.setFont(data_->assets.getFont("MAIN"));
-	restart_.setPosition(float(WIN_RES.x - restart_.getGlobalBounds().width / 2), float(WIN_RES.y / 2));
-	restart_.setFillColor(sf::Color::Black);
-	restart_.setCharacterSize(60);
+	bg_.setTexture(data_->assets.getTexture("paused bg"));
+
+	restart_.setSize(sf::Vector2f(500, 45));
+	restart_.setFillColor(sf::Color::Transparent);
+	restart_.setPosition(float(WIN_RES.x / 2 - restart_.getGlobalBounds().width / 2), float(WIN_RES.y / 2 - restart_.getGlobalBounds().height));
+
+	exit_.setSize(sf::Vector2f(500, 45));
+	exit_.setFillColor(sf::Color::Transparent);
+	exit_.setPosition(float(WIN_RES.x / 2 - exit_.getGlobalBounds().width / 2), float(WIN_RES.y / 2 + exit_.getGlobalBounds().height));
 }
 
 void PauseState::handleInput()
@@ -18,11 +23,17 @@ void PauseState::handleInput()
 		{
 			data_->window.close();
 		}
+	}
 
-		if (event.type == event.KeyPressed && event.key.code == sf::Keyboard::Escape)
-		{
-			data_->maschine.addState(std::make_unique<EndGameState>(data_), true);
-		}
+	if (InputManager::isShapeClicked(restart_, sf::Mouse::Left, data_->window))
+	{
+		data_->transitionSound.play();
+		data_->maschine.addState(std::make_unique<GameState>(data_, songName_), true);
+	}
+	if (InputManager::isShapeClicked(exit_, sf::Mouse::Left, data_->window))
+	{
+		data_->transitionSound.play();
+		data_->maschine.addState(std::make_unique<EndGameState>(data_, songName_, score_, maxCombo_), true);
 	}
 }
 
@@ -32,7 +43,9 @@ void PauseState::update(float dt)
 
 void PauseState::draw(float dt)
 {
-	data_->window.clear(sf::Color(227, 0, 100));
+	data_->window.clear();
+	data_->window.draw(bg_);
 	data_->window.draw(restart_);
+	data_->window.draw(exit_);
 	data_->window.display();
 }

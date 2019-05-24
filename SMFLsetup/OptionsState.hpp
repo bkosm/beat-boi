@@ -12,7 +12,9 @@ public:
 private:
 	GameDataRef data_;
 
-	sf::Text optionsText_, returnText_, playText_, infoText_;
+	sf::Sprite bg_;
+	sf::RectangleShape play_, viewKeys_, return_;
 
 	std::string songName_;
+	bool clicked_{ false };
 };

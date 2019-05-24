@@ -4,6 +4,7 @@ GameState::GameState(GameDataRef data, std::string songName) : data_(std::move(d
 {
 	genDots_();
 
+	bg_.setTexture(data_->assets.getTexture("game bg"));
 	firstHitter_.setTexture(data_->assets.getTexture("hit off"));
 	secondHitter_.setTexture(data_->assets.getTexture("hit off"));
 	thirdHitter_.setTexture(data_->assets.getTexture("hit off"));
@@ -15,27 +16,25 @@ GameState::GameState(GameDataRef data, std::string songName) : data_(std::move(d
 
 	scoreText_.setFont(data_->assets.getFont("MAIN"));
 	scoreText_.setOrigin(scoreText_.getGlobalBounds().width, scoreText_.getGlobalBounds().height);
-	scoreText_.setPosition(float(WIN_RES.x * 0.98), float(WIN_RES.y / 10));
-	scoreText_.setFillColor(sf::Color::Black);
-	scoreText_.setCharacterSize(45);
+	scoreText_.setPosition(float(WIN_RES.x * 0.995), float(WIN_RES.y * 0.028));
+	scoreText_.setFillColor(sf::Color::White);
+	scoreText_.setCharacterSize(15);
 
 	comboText_.setFont(data_->assets.getFont("MAIN"));
-	comboText_.setPosition(float(WIN_RES.x * 0.98), float(WIN_RES.y / 5));
-	comboText_.setFillColor(sf::Color::Black);
-	comboText_.setCharacterSize(35);
-
-	dancer_.sprite.setTexture(data_->assets.getTexture("HANDSUPBOI1"));
-	dancer_.sprite.setPosition(float(WIN_RES.x * 8.5 / 10) - dancer_.sprite.getGlobalBounds().width / 2, float(WIN_RES.y / 2));
-
-	transitionSound_.setBuffer(data_->assets.getSound("TRANSITION"));
-	transitionSound_.play();
+	comboText_.setPosition(float(WIN_RES.x * 0.995), float(WIN_RES.y * 0.07));
+	comboText_.setFillColor(sf::Color::White);
+	comboText_.setCharacterSize(15);
 
 	kickSound_.setBuffer(data_->songsData.getSong(songName_).sfx.kick);
+	kickSound_.setVolume(30);
 	clapSound_.setBuffer(data_->songsData.getSong(songName_).sfx.clap);
+	clapSound_.setVolume(30);
 	hatSound_.setBuffer(data_->songsData.getSong(songName_).sfx.hat);
+	hatSound_.setVolume(30);
 	percSound_.setBuffer(data_->songsData.getSong(songName_).sfx.perc);
+	percSound_.setVolume(30);
 
-	scrollSpeed_ = 10;
+	scrollSpeed_ = 5;
 	musicDuration_ = data_->songsData.getSong(songName_).music.getDuration().asSeconds();
 
 	data_->songsData.getSong(songName_).music.play();
@@ -57,8 +56,8 @@ void GameState::handleInput()
 
 		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Key::Escape)
 		{
-			data_->songsData.getSong(songName_).music.pause();
-			data_->maschine.addState(std::make_unique<PauseState>(data_), true);
+			data_->songsData.getSong(songName_).music.stop();
+			data_->maschine.addState(std::make_unique<PauseState>(data_, songName_, score_, maxCombo_), true);
 		}
 
 		if (event.type == sf::Event::KeyPressed && (event.key.code == data_->settings.strum1 || event.key.code == data_->settings.strum2))
@@ -72,23 +71,21 @@ void GameState::update(float dt)
 {
 	if (gameClock_.getElapsedTime().asSeconds() > musicDuration_)
 	{
-		data_->maschine.addState(std::make_unique<EndGameState>(data_), true);
+		data_->maschine.addState(std::make_unique<EndGameState>(data_, songName_, score_, maxCombo_), true);
 	}
 
 	animateHitmarkers_();
-	updateScore_();
 	updateDots_();
-
-	dancer_.animate(data_, "HANDSUPBOI1", "HANDSUPBOI2", data_->songsData.getSong(songName_).beatDuration / 2);
+	updateScore_();
 }
 
 void GameState::draw(float dt)
 {
-	data_->window.clear(sf::Color(227, 0, 64));
+	data_->window.clear();
 
+	data_->window.draw(bg_);
 	data_->window.draw(scoreText_);
 	data_->window.draw(comboText_);
-	data_->window.draw(dancer_.sprite);
 	data_->window.draw(firstHitter_);
 	data_->window.draw(secondHitter_);
 	data_->window.draw(fourthHitter_);
@@ -102,7 +99,8 @@ void GameState::updateScore_()
 {
 	if (!chart_.empty())
 	{
-		for (auto& dots : onScreen_) {
+		for (auto& dots : onScreen_)
+		{
 			int currentScore = 0;
 			if (InputManager::scoreCollision(dots[0].sprite, firstHitter_) && !dots[0].isHit && !dots[0].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit1) && strumOn_)
 			{

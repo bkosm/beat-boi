@@ -12,7 +12,9 @@ public:
 private:
 	GameDataRef data_;
 
-	sf::Text uiText_, enteredText_, clrText_;
-	sf::RectangleShape textRect_;
+	sf::Sprite bg_;
+	sf::Text enteredText_;
 	sf::String stringEntered_;
+
+	bool played_{ false };
 };

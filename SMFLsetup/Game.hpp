@@ -52,14 +52,3 @@ private:
 
 	void run() const;
 };
-
-struct DancerSprite
-{
-	sf::Sprite sprite;
-	sf::Clock clock;
-	sf::IntRect frame{ 0, 0, BOI_ANIMATION_HORIZONTAL, BOI_ANIMATION_VERTICAL };
-	bool isFirst = true;
-
-	DancerSprite();
-	void animate(GameDataRef& gameData, const std::string& firstTextureName, const std::string& secondTextureName, float animationDuration);
-};

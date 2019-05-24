@@ -2,37 +2,19 @@
 
 OptionsState::OptionsState(GameDataRef data, std::string songName) : data_(std::move(data)), songName_(std::move(songName))
 {
-	infoText_.setString("Is this the song that\nyou wanted to play?");
-	infoText_.setFont(data_->assets.getFont("MAIN"));
-	infoText_.setCharacterSize(40);
-	infoText_.setOutlineThickness(2.f);
-	infoText_.setFillColor(sf::Color::White);
-	infoText_.setOutlineColor(sf::Color::Black);
-	infoText_.setPosition(float(WIN_RES.x / 16), float(WIN_RES.y / 16));
+	bg_.setTexture(data_->assets.getTexture("options bg"));
 
-	playText_.setString("play");
-	playText_.setFont(data_->assets.getFont("MAIN"));
-	playText_.setCharacterSize(35);
-	playText_.setOutlineThickness(3.f);
-	playText_.setFillColor(sf::Color::Black);
-	playText_.setOutlineColor(sf::Color::White);
-	playText_.setPosition(float(WIN_RES.x / 2 - playText_.getGlobalBounds().width / 2), float(WIN_RES.y * 0.5));
-	
-	optionsText_.setString("view key bindings");
-	optionsText_.setFont(data_->assets.getFont("MAIN"));
-	optionsText_.setCharacterSize(35);
-	optionsText_.setOutlineThickness(3.f);
-	optionsText_.setFillColor(sf::Color::Black);
-	optionsText_.setOutlineColor(sf::Color::White);
-	optionsText_.setPosition(float(WIN_RES.x / 2 - optionsText_.getGlobalBounds().width / 2), float(WIN_RES.y * 0.6));
+	play_.setSize(sf::Vector2f(400, 25));
+	play_.setFillColor(sf::Color::Transparent);
+	play_.setPosition(float(WIN_RES.x / 2 - play_.getGlobalBounds().width / 2), float(WIN_RES.y / 2 - 2 * play_.getGlobalBounds().height));
 
-	returnText_.setString("return to menu");
-	returnText_.setFont(data_->assets.getFont("MAIN"));
-	returnText_.setCharacterSize(35);
-	returnText_.setOutlineThickness(3.f);
-	returnText_.setFillColor(sf::Color::Black);
-	returnText_.setOutlineColor(sf::Color::White);
-	returnText_.setPosition(float(WIN_RES.x / 2 - returnText_.getGlobalBounds().width / 2), float(WIN_RES.y * 0.7));
+	viewKeys_.setSize(sf::Vector2f(400, 25));
+	viewKeys_.setFillColor(sf::Color::Transparent);
+	viewKeys_.setPosition(float(WIN_RES.x / 2 - viewKeys_.getGlobalBounds().width / 2), float(WIN_RES.y / 2));
+
+	return_.setSize(sf::Vector2f(400, 25));
+	return_.setFillColor(sf::Color::Transparent);
+	return_.setPosition(float(WIN_RES.x / 2 - return_.getGlobalBounds().width / 2), float(WIN_RES.y / 2 + 2 * return_.getGlobalBounds().height));
 
 	data_->songsData.getSong(songName_).music.play();
 }
@@ -48,20 +30,24 @@ void OptionsState::handleInput()
 			data_->window.close();
 		}
 	}
-	
-	if (InputManager::isTextClicked(playText_,sf::Mouse::Left,data_->window))
+
+	if (InputManager::isShapeClicked(play_, sf::Mouse::Left, data_->window) && !clicked_)
 	{
+		clicked_ = true;
 		data_->songsData.getSong(songName_).music.stop();
+		data_->transitionSound.play();
 		data_->maschine.addState(std::make_unique<GameState>(data_, songName_), true);
 	}
-	if (InputManager::isTextClicked(returnText_, sf::Mouse::Left, data_->window))
+	if (InputManager::isShapeClicked(viewKeys_, sf::Mouse::Left, data_->window))
+	{
+		data_->transitionSound.play();
+		data_->maschine.addState(std::make_unique<KeyBindingState>(data_), false);
+	}
+	if (InputManager::isShapeClicked(return_, sf::Mouse::Left, data_->window))
 	{
 		data_->songsData.getSong(songName_).music.stop();
-		data_->maschine.removeState();
-	}
-	if (InputManager::isTextClicked(optionsText_, sf::Mouse::Left, data_->window))
-	{
-		data_->maschine.addState(std::make_unique<KeyBindingState>(data_), false);
+		data_->transitionSound.play();
+		data_->maschine.addState(std::make_unique<MainMenuState>(data_), true);
 	}
 }
 
@@ -71,10 +57,10 @@ void OptionsState::update(float dt)
 
 void OptionsState::draw(float dt)
 {
-	data_->window.clear(BG_COLOR);
-	data_->window.draw(infoText_);
-	data_->window.draw(playText_);
-	data_->window.draw(returnText_);
-	data_->window.draw(optionsText_);
+	data_->window.clear();
+	data_->window.draw(bg_);
+	data_->window.draw(play_);
+	data_->window.draw(viewKeys_);
+	data_->window.draw(return_);
 	data_->window.display();
 }

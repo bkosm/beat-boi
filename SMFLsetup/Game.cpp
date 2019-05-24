@@ -85,34 +85,3 @@ void Game::run() const
 		data_->maschine.getActiveState()->draw(interpolation);
 	}
 }
-
-DancerSprite::DancerSprite()
-{
-	sprite.setTextureRect(frame);
-}
-
-void DancerSprite::animate(GameDataRef& gameData, const std::string& firstTextureName,
-	const std::string& secondTextureName, const float animationDuration)
-{
-	if (this->clock.getElapsedTime().asSeconds() > animationDuration)
-	{
-		if (this->frame.left > int(gameData->assets.getTexture(firstTextureName).getSize().x * 3 / 4))
-		{
-			this->frame.left = 0;
-			if (isFirst)
-			{
-				this->sprite.setTexture(gameData->assets.getTexture(secondTextureName));
-				isFirst = false;
-			}
-			else
-			{
-				this->sprite.setTexture(gameData->assets.getTexture(firstTextureName));
-				isFirst = true;
-			}
-		}
-
-		this->sprite.setTextureRect(this->frame);
-		this->frame.left += BOI_ANIMATION_HORIZONTAL;
-		this->clock.restart();
-	}
-}

@@ -3,7 +3,7 @@
 class PauseState : public State
 {
 public:
-	PauseState(GameDataRef data);
+	PauseState(GameDataRef data, std::string songName, int score, int maxCombo);
 
 	void handleInput() override;
 	void update(float dt) override;
@@ -12,5 +12,9 @@ public:
 private:
 	GameDataRef data_;
 
-	sf::Text restart_;
+	sf::Sprite bg_;
+	sf::RectangleShape restart_, exit_;
+
+	std::string songName_;
+	int score_, maxCombo_;
 };
