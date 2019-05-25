@@ -5,14 +5,11 @@ GameState::GameState(GameDataRef data, std::string songName) : data_(std::move(d
 	genDots_();
 
 	bg_.setTexture(data_->assets.getTexture("game bg"));
-	firstHitter_.setTexture(data_->assets.getTexture("hit off"));
-	secondHitter_.setTexture(data_->assets.getTexture("hit off"));
-	thirdHitter_.setTexture(data_->assets.getTexture("hit off"));
-	fourthHitter_.setTexture(data_->assets.getTexture("hit off"));
-	firstHitter_.setPosition(float(WIN_RES.x / 12), float(WIN_RES.y * 6 / 10));
-	secondHitter_.setPosition(float(WIN_RES.x / 4), float(WIN_RES.y * 6 / 10));
-	thirdHitter_.setPosition(float(WIN_RES.x * 5 / 12), float(WIN_RES.y * 6 / 10));
-	fourthHitter_.setPosition(float(WIN_RES.x * 7 / 12), float(WIN_RES.y * 6 / 10));
+
+	firstHitter_.setPosition(float(WIN_RES.x * 0.1188), float(WIN_RES.y * 0.8));
+	secondHitter_.setPosition(float(WIN_RES.x * 0.282), float(WIN_RES.y * 0.8));
+	thirdHitter_.setPosition(float(WIN_RES.x * 0.445), float(WIN_RES.y * 0.8));
+	fourthHitter_.setPosition(float(WIN_RES.x * 0.607), float(WIN_RES.y * 0.8));
 
 	scoreText_.setFont(data_->assets.getFont("MAIN"));
 	scoreText_.setOrigin(scoreText_.getGlobalBounds().width, scoreText_.getGlobalBounds().height);
@@ -158,50 +155,50 @@ void GameState::genDots_()
 		std::vector<Hitmarker> temp;
 
 		if (data_->songsData.getSong(songName_).chart.firstRow[i] == true) {
-			Hitmarker dot1(data_->assets.getTexture("dot"));
-			dot1.sprite.setPosition(float(WIN_RES.x / 12), -dot1.sprite.getGlobalBounds().height);
+			Hitmarker dot1(data_->assets.getTexture("dot 1"));
+			dot1.sprite.setPosition(float(WIN_RES.x * 0.1188), -dot1.sprite.getGlobalBounds().height);
 			temp.emplace_back(dot1);
 		}
 		else
 		{
 			Hitmarker dot1(this->data_->assets.getTexture("EMPTYTEX"));
-			dot1.sprite.setPosition(float(WIN_RES.x / 12), -dot1.sprite.getGlobalBounds().height);
+			dot1.sprite.setPosition(float(WIN_RES.x * 0.1188), -dot1.sprite.getGlobalBounds().height);
 			temp.emplace_back(dot1);
 		}
 
 		if (data_->songsData.getSong(songName_).chart.secondRow[i] == true) {
-			Hitmarker dot2(data_->assets.getTexture("dot"));
-			dot2.sprite.setPosition(float(WIN_RES.x / 4), -dot2.sprite.getGlobalBounds().height);
+			Hitmarker dot2(data_->assets.getTexture("dot 2"));
+			dot2.sprite.setPosition(float(WIN_RES.x * 0.282), -dot2.sprite.getGlobalBounds().height);
 			temp.emplace_back(dot2);
 		}
 		else
 		{
 			Hitmarker dot2(this->data_->assets.getTexture("EMPTYTEX"));
-			dot2.sprite.setPosition(float(WIN_RES.x / 4), -dot2.sprite.getGlobalBounds().height);
+			dot2.sprite.setPosition(float(WIN_RES.x * 0.282), -dot2.sprite.getGlobalBounds().height);
 			temp.emplace_back(dot2);
 		}
 
 		if (data_->songsData.getSong(songName_).chart.thirdRow[i] == true) {
-			Hitmarker dot3(data_->assets.getTexture("dot"));
-			dot3.sprite.setPosition(float(WIN_RES.x * 5 / 12), -dot3.sprite.getGlobalBounds().height);
+			Hitmarker dot3(data_->assets.getTexture("dot 3"));
+			dot3.sprite.setPosition(float(WIN_RES.x * 0.445), -dot3.sprite.getGlobalBounds().height);
 			temp.emplace_back(dot3);
 		}
 		else
 		{
 			Hitmarker dot3(this->data_->assets.getTexture("EMPTYTEX"));
-			dot3.sprite.setPosition(float(WIN_RES.x * 5 / 12), -dot3.sprite.getGlobalBounds().height);
+			dot3.sprite.setPosition(float(WIN_RES.x * 0.445), -dot3.sprite.getGlobalBounds().height);
 			temp.emplace_back(dot3);
 		}
 
 		if (data_->songsData.getSong(songName_).chart.fourthRow[0] == true) {
-			Hitmarker dot4(data_->assets.getTexture("dot"));
-			dot4.sprite.setPosition(float(WIN_RES.x * 7 / 12), -dot4.sprite.getGlobalBounds().height);
+			Hitmarker dot4(data_->assets.getTexture("dot 4"));
+			dot4.sprite.setPosition(float(WIN_RES.x * 0.607), -dot4.sprite.getGlobalBounds().height);
 			temp.emplace_back(dot4);
 		}
 		else
 		{
 			Hitmarker dot4(this->data_->assets.getTexture("EMPTYTEX"));
-			dot4.sprite.setPosition(float(WIN_RES.x * 7 / 12), -dot4.sprite.getGlobalBounds().height);
+			dot4.sprite.setPosition(float(WIN_RES.x * 0.607), -dot4.sprite.getGlobalBounds().height);
 			temp.emplace_back(dot4);
 		}
 
@@ -255,7 +252,7 @@ void GameState::animateHitmarkers_()
 {
 	if (sf::Keyboard::isKeyPressed(data_->settings.hit1))
 	{
-		firstHitter_.setTexture(data_->assets.getTexture("hit on"));
+		firstHitter_.setTexture(data_->assets.getTexture("hit 1 on"));
 	}
 	else
 	{
@@ -264,7 +261,7 @@ void GameState::animateHitmarkers_()
 
 	if (sf::Keyboard::isKeyPressed(data_->settings.hit2))
 	{
-		secondHitter_.setTexture(data_->assets.getTexture("hit on"));
+		secondHitter_.setTexture(data_->assets.getTexture("hit 2 on"));
 	}
 	else
 	{
@@ -273,7 +270,7 @@ void GameState::animateHitmarkers_()
 
 	if (sf::Keyboard::isKeyPressed(data_->settings.hit3))
 	{
-		thirdHitter_.setTexture(data_->assets.getTexture("hit on"));
+		thirdHitter_.setTexture(data_->assets.getTexture("hit 3 on"));
 	}
 	else
 	{
@@ -282,7 +279,7 @@ void GameState::animateHitmarkers_()
 
 	if (sf::Keyboard::isKeyPressed(data_->settings.hit4))
 	{
-		fourthHitter_.setTexture(data_->assets.getTexture("hit on"));
+		fourthHitter_.setTexture(data_->assets.getTexture("hit 4 on"));
 	}
 	else
 	{

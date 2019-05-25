@@ -2,11 +2,6 @@
 
 SplashState::SplashState(GameDataRef data) : data_(std::move(data))
 {
-	data_->assets.loadTexture("EMPTYTEX", EMPTY_TEX_PATH);
-	data_->assets.loadTexture("hit on", HIT_ON_PATH);
-	data_->assets.loadTexture("hit off", HIT_OFF_PATH);
-	data_->assets.loadTexture("dot", DOT_PATH);
-
 	data_->assets.loadSound("TRANSITION", TRANSITION_SOUND_PATH);
 
 	data_->assets.loadFont("MAIN", MAIN_FONT_PATH);
@@ -18,6 +13,17 @@ SplashState::SplashState(GameDataRef data) : data_(std::move(data))
 	data_->assets.loadTexture("game bg", GAME_BG_PATH);
 	data_->assets.loadTexture("paused bg", PAUSED_BG_PATH);
 	data_->assets.loadTexture("end bg", END_BG_PATH);
+
+	data_->assets.loadTexture("EMPTYTEX", EMPTY_TEX_PATH);
+	data_->assets.loadTexture("dot 1", DOT1_PATH);
+	data_->assets.loadTexture("dot 2", DOT2_PATH);
+	data_->assets.loadTexture("dot 3", DOT3_PATH);
+	data_->assets.loadTexture("dot 4", DOT4_PATH);
+	data_->assets.loadTexture("hit off", HIT_OFF_PATH);
+	data_->assets.loadTexture("hit 1 on", HIT1_ON_PATH);
+	data_->assets.loadTexture("hit 2 on", HIT2_ON_PATH);
+	data_->assets.loadTexture("hit 3 on", HIT3_ON_PATH);
+	data_->assets.loadTexture("hit 4 on", HIT4_ON_PATH);
 
 	data_->transitionSound.setBuffer(data_->assets.getSound("TRANSITION"));
 	data_->transitionSound.setVolume(50.f);
@@ -52,7 +58,7 @@ void SplashState::handleInput()
 	{
 		data_->backgroundMusic.stop();
 		data_->songsData.loadSong("popstars");
-		data_->maschine.addState(std::make_unique<OptionsState>(data_, "popstars"), true);
+		data_->maschine.addState(std::make_unique<GameState>(data_, "popstars"), true);
 	}
 }
 
