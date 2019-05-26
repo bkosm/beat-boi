@@ -41,10 +41,7 @@ bool SongsData::loadSong(const std::string& songName)
 		}
 
 		songContainer_[songName].music.openFromFile("./data/" + songName + "/music.wav");
-		songContainer_[songName].sfx.kick.loadFromFile("./data/" + songName + "/kick.wav");
-		songContainer_[songName].sfx.clap.loadFromFile("./data/" + songName + "/clap.wav");
-		songContainer_[songName].sfx.hat.loadFromFile("./data/" + songName + "/hat.wav");
-		songContainer_[songName].sfx.perc.loadFromFile("./data/" + songName + "/perc.wav");
+		songContainer_[songName].hitSound.loadFromFile("./data/" + songName + "/hitsound.wav");
 		songContainer_[songName].bpm = readBpm;
 		songContainer_[songName].beatDuration = 60.0f / readBpm;
 		songContainer_[songName].loaded = true;

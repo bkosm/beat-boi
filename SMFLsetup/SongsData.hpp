@@ -5,16 +5,11 @@ struct SongChart
 	std::vector<bool> firstRow, secondRow, thirdRow, fourthRow;
 };
 
-struct Sfx
-{
-	sf::SoundBuffer kick, clap, hat, perc;
-};
-
 struct Song
 {
 	SongChart chart;
 	sf::Music music;
-	Sfx sfx;
+	sf::SoundBuffer hitSound;
 	float bpm{}, beatDuration{};
 	bool loaded = false;
 };

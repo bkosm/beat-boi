@@ -14,8 +14,10 @@ private:
 
 	sf::Sprite bg_;
 	sf::RectangleShape restart_, exit_;
-	sf::Text scoreText_, comboText_, bestScoreText_;
+	sf::Text scoreText_, comboText_, bestScoreText_, bestComboText_;
 
-	std::string songName_;
-	int score_, combo_, bestScore_{ 0 };
+	std::string songName_, bestScore_, bestCombo_;
+	int score_, combo_;
+
+	void processBestScore_();
 };

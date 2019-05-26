@@ -6,8 +6,6 @@ Settings::Settings()
 	hit2 = sf::Keyboard::Key::X;
 	hit3 = sf::Keyboard::Key::C;
 	hit4 = sf::Keyboard::Key::V;
-	strum1 = sf::Keyboard::Key::Period;
-	strum2 = sf::Keyboard::Key::Slash;
 	volumeUp = sf::Keyboard::Key::Equal;
 	volumeDown = sf::Keyboard::Key::Hyphen;
 	speedUp = sf::Keyboard::Key::RBracket;
@@ -20,8 +18,6 @@ void Settings::resetKeyBindings()
 	hit2 = sf::Keyboard::Key::X;
 	hit3 = sf::Keyboard::Key::C;
 	hit4 = sf::Keyboard::Key::V;
-	strum1 = sf::Keyboard::Key::Period;
-	strum2 = sf::Keyboard::Key::Slash;
 	volumeUp = sf::Keyboard::Key::Equal;
 	volumeDown = sf::Keyboard::Key::Hyphen;
 	speedUp = sf::Keyboard::Key::RBracket;

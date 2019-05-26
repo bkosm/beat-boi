@@ -3,6 +3,7 @@
 SplashState::SplashState(GameDataRef data) : data_(std::move(data))
 {
 	data_->assets.loadSound("TRANSITION", TRANSITION_SOUND_PATH);
+	data_->assets.loadSound("APPLAUSE", APPLAUSE_SOUND_PATH);
 
 	data_->assets.loadFont("MAIN", MAIN_FONT_PATH);
 
@@ -26,7 +27,9 @@ SplashState::SplashState(GameDataRef data) : data_(std::move(data))
 	data_->assets.loadTexture("hit 4 on", HIT4_ON_PATH);
 
 	data_->transitionSound.setBuffer(data_->assets.getSound("TRANSITION"));
+	data_->applauseSound.setBuffer(data_->assets.getSound("APPLAUSE"));
 	data_->transitionSound.setVolume(50.f);
+	data_->applauseSound.setVolume(50.f);
 
 	bg_.setTexture(data_->assets.getTexture("splash bg"));
 	data_->window.draw(bg_);

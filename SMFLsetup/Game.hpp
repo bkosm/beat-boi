@@ -6,7 +6,7 @@
 
 struct Settings
 {
-	sf::Keyboard::Key hit1, hit2, hit3, hit4, strum1, strum2, speedUp, speedDown, volumeUp, volumeDown;
+	sf::Keyboard::Key hit1, hit2, hit3, hit4, speedUp, speedDown, volumeUp, volumeDown;
 
 	Settings();
 	void resetKeyBindings();
@@ -31,7 +31,7 @@ struct GameData
 	SongsData songsData;
 	Settings settings;
 	sf::Music backgroundMusic;
-	sf::Sound transitionSound;
+	sf::Sound transitionSound, applauseSound;
 };
 
 typedef std::shared_ptr<GameData> GameDataRef;
