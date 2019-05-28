@@ -23,6 +23,11 @@ GameState::GameState(GameDataRef data, std::string songName) : data_(std::move(d
 	comboText_.setFillColor(sf::Color::White);
 	comboText_.setCharacterSize(15);
 
+	particles_.one.setEmitter(sf::Vector2f(firstHitter_.getPosition().x + firstHitter_.getGlobalBounds().width / 2, firstHitter_.getPosition().y + firstHitter_.getGlobalBounds().height / 2));
+	particles_.two.setEmitter(sf::Vector2f(secondHitter_.getPosition().x + secondHitter_.getGlobalBounds().width / 2, secondHitter_.getPosition().y + secondHitter_.getGlobalBounds().height / 2));
+	particles_.three.setEmitter(sf::Vector2f(thirdHitter_.getPosition().x + thirdHitter_.getGlobalBounds().width / 2, thirdHitter_.getPosition().y + thirdHitter_.getGlobalBounds().height / 2));
+	particles_.four.setEmitter(sf::Vector2f(fourthHitter_.getPosition().x + fourthHitter_.getGlobalBounds().width / 2, fourthHitter_.getPosition().y + fourthHitter_.getGlobalBounds().height / 2));
+
 	hitSound_.setBuffer(data_->songsData.getSong(songName_).hitSound);
 	hitSound_.setVolume(10);
 
@@ -102,6 +107,8 @@ void GameState::update(float dt)
 	animateHitmarkers_();
 	updateDots_();
 	updateScore_();
+
+	particles_.updateAll();
 }
 
 void GameState::draw(float dt)
@@ -115,6 +122,7 @@ void GameState::draw(float dt)
 	data_->window.draw(secondHitter_);
 	data_->window.draw(fourthHitter_);
 	data_->window.draw(thirdHitter_);
+	particles_.draw(data_->window);
 	drawDots_();
 
 	data_->window.display();
@@ -131,57 +139,61 @@ void GameState::updateScore_()
 			if (InputManager::scoreCollision(dots[0].sprite, firstHitter_) && !dots[0].isHit && !dots[0].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit1))
 			{
 				dots[0].isHit = true;
-				dots[0].sprite.setTexture(data_->assets.getTexture("EMPTYTEX"));
 				combo_++;
 				currentScore += 5 + combo_;
+				particles_.drawOne = true;
 			}
-			else if (InputManager::scoreCollision(dots[0].sprite, firstHitter_) && !dots[0].isHit && dots[0].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit1))
+			else if (InputManager::scoreCollision(dots[0].sprite, firstHitter_) && dots[0].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit1))
 			{
 				failed = true;
+				particles_.drawOne = false;
 			}
 			if (InputManager::scoreCollision(dots[1].sprite, secondHitter_) && !dots[1].isHit && !dots[1].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit2))
 			{
 				dots[1].isHit = true;
-				dots[1].sprite.setTexture(data_->assets.getTexture("EMPTYTEX"));
 				combo_++;
 				currentScore += 5 + combo_;
+				particles_.drawTwo = true;
 			}
-			else if (InputManager::scoreCollision(dots[1].sprite, secondHitter_) && !dots[1].isHit && dots[1].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit2))
+			else if (InputManager::scoreCollision(dots[1].sprite, secondHitter_) && dots[1].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit2))
 			{
 				failed = true;
+				particles_.drawTwo = false;
 			}
 			if (InputManager::scoreCollision(dots[2].sprite, thirdHitter_) && !dots[2].isHit && !dots[2].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit3))
 			{
 				dots[2].isHit = true;
-				dots[2].sprite.setTexture(data_->assets.getTexture("EMPTYTEX"));
 				combo_++;
 				currentScore += 5 + combo_;
+				particles_.drawThree = true;
 			}
-			else if (InputManager::scoreCollision(dots[2].sprite, thirdHitter_) && !dots[2].isHit && dots[2].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit3))
+			else if (InputManager::scoreCollision(dots[2].sprite, thirdHitter_) && dots[2].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit3))
 			{
 				failed = true;
+				particles_.drawThree = false;
 			}
 			if (InputManager::scoreCollision(dots[3].sprite, fourthHitter_) && !dots[3].isHit && !dots[3].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit4))
 			{
 				dots[3].isHit = true;
-				dots[3].sprite.setTexture(data_->assets.getTexture("EMPTYTEX"));
 				combo_++;
 				currentScore += 5 + combo_;
+				particles_.drawFour = true;
 			}
-			else if (InputManager::scoreCollision(dots[3].sprite, fourthHitter_) && !dots[3].isHit && dots[3].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit4))
+			else if (InputManager::scoreCollision(dots[3].sprite, fourthHitter_) && dots[3].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit4))
 			{
 				failed = true;
+				particles_.drawFour = false;
 			}
 
 			if (failed)
 			{
+				particles_.dontDraw();
 				combo_ = 0;
 			}
 			else
 			{
 				score_ += currentScore;
 			}
-			break;
 		}
 	}
 
@@ -210,7 +222,7 @@ void GameState::genDots_()
 		}
 		else
 		{
-			Hitmarker dot1(this->data_->assets.getTexture("EMPTYTEX"));
+			Hitmarker dot1(this->data_->assets.getTexture("EMPTYTEX"), true);
 			dot1.sprite.setPosition(float(WIN_RES.x * 0.1188), -dot1.sprite.getGlobalBounds().height);
 			temp.emplace_back(dot1);
 		}
@@ -222,7 +234,7 @@ void GameState::genDots_()
 		}
 		else
 		{
-			Hitmarker dot2(this->data_->assets.getTexture("EMPTYTEX"));
+			Hitmarker dot2(this->data_->assets.getTexture("EMPTYTEX"), true);
 			dot2.sprite.setPosition(float(WIN_RES.x * 0.282), -dot2.sprite.getGlobalBounds().height);
 			temp.emplace_back(dot2);
 		}
@@ -234,7 +246,7 @@ void GameState::genDots_()
 		}
 		else
 		{
-			Hitmarker dot3(this->data_->assets.getTexture("EMPTYTEX"));
+			Hitmarker dot3(this->data_->assets.getTexture("EMPTYTEX"), true);
 			dot3.sprite.setPosition(float(WIN_RES.x * 0.445), -dot3.sprite.getGlobalBounds().height);
 			temp.emplace_back(dot3);
 		}
@@ -246,7 +258,7 @@ void GameState::genDots_()
 		}
 		else
 		{
-			Hitmarker dot4(this->data_->assets.getTexture("EMPTYTEX"));
+			Hitmarker dot4(this->data_->assets.getTexture("EMPTYTEX"), true);
 			dot4.sprite.setPosition(float(WIN_RES.x * 0.607), -dot4.sprite.getGlobalBounds().height);
 			temp.emplace_back(dot4);
 		}
@@ -285,9 +297,10 @@ void GameState::updateDots_()
 			{
 				for (const auto& dot : *onScreen_.begin())
 				{
-					if (!dot.hasEmptyTex())
+					if (!dot.isHit)
 					{
 						combo_ = 0;
+						particles_.dontDraw();
 						break;
 					}
 				}

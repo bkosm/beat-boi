@@ -40,13 +40,13 @@ bool SongsData::loadSong(const std::string& songName)
 			return false;
 		}
 
+		readBpm *= TEMPO_CORRECTION;
+
 		songContainer_[songName].music.openFromFile("./data/" + songName + "/music.wav");
 		songContainer_[songName].hitSound.loadFromFile("./data/" + songName + "/hitsound.wav");
 		songContainer_[songName].bpm = readBpm;
 		songContainer_[songName].beatDuration = 60.0f / readBpm;
 		songContainer_[songName].loaded = true;
-
-		songContainer_[songName].bpm *= TEMPO_CORRECTION;
 	}
 	return true;
 }

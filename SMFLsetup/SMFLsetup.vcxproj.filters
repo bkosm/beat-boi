@@ -57,6 +57,9 @@
     <ClCompile Include="KeyBindingState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HitParticles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -102,6 +105,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="KeyBindingState.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HitParticles.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

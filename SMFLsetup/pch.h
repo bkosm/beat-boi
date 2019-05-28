@@ -20,6 +20,7 @@
 #include "AssetManager.hpp"
 #include "InputManager.hpp"
 #include "SongsData.hpp"
+#include "HitParticles.hpp"
 
 #include "SplashState.hpp"
 #include "MainMenuState.hpp"

@@ -13,6 +13,7 @@ private:
 	GameDataRef data_;
 
 	std::vector<std::vector<Hitmarker>> chart_{}, onScreen_{};
+	EffectParticles particles_;
 	sf::Sprite firstHitter_, secondHitter_, fourthHitter_, thirdHitter_, bg_;
 	sf::Text scoreText_, comboText_;
 	sf::Sound hitSound_;

@@ -172,6 +172,7 @@
     <ClCompile Include="EndGameState.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="HitParticles.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="KeyBindingState.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="Game.hpp" />
     <ClInclude Include="GameState.hpp" />
     <ClInclude Include="GlobalConstants.hpp" />
+    <ClInclude Include="HitParticles.hpp" />
     <ClInclude Include="InputManager.hpp" />
     <ClInclude Include="KeyBindingState.hpp" />
     <ClInclude Include="MainMenuState.hpp" />

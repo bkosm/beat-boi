@@ -60,8 +60,8 @@ void SplashState::handleInput()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
 	{
 		data_->backgroundMusic.stop();
-		data_->songsData.loadSong("popstars");
-		data_->maschine.addState(std::make_unique<GameState>(data_, "popstars"), true);
+		data_->songsData.loadSong("xremix");
+		data_->maschine.addState(std::make_unique<GameState>(data_, "xremix"), true);
 	}
 }
 
