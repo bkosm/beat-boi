@@ -1,6 +1,6 @@
 #include "pch.h"
 
-KeyBindingState::KeyBindingState(GameDataRef data) : data_(std::move(data))
+KeyBindingState::KeyBindingState(std::shared_ptr<GameData> data) : data_(std::move(data))
 {
 	bg_.setTexture(data_->assets.getTexture("key bg"));
 }
@@ -13,7 +13,7 @@ void KeyBindingState::handleInput()
 	{
 		if (event.type == sf::Event::Closed)
 		{
-			data_->window.close(); 
+			data_->window.close();
 		}
 		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 		{
@@ -23,11 +23,9 @@ void KeyBindingState::handleInput()
 	}
 }
 
-void KeyBindingState::update(float dt)
-{
-}
+void KeyBindingState::update() {}
 
-void KeyBindingState::draw(float dt)
+void KeyBindingState::draw()
 {
 	data_->window.clear();
 	data_->window.draw(bg_);

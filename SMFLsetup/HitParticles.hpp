@@ -9,7 +9,7 @@ struct Particle
 class HitParticles : public sf::Drawable, public sf::Transformable
 {
 public:
-	HitParticles(unsigned int count);
+	HitParticles(unsigned count);
 
 	void setEmitter(sf::Vector2f position);
 	void update(sf::Time elapsed);

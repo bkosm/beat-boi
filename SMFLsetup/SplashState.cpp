@@ -1,6 +1,6 @@
 #include "pch.h"
 
-SplashState::SplashState(GameDataRef data) : data_(std::move(data))
+SplashState::SplashState(std::shared_ptr<GameData> data) : data_(std::move(data))
 {
 	data_->assets.loadSound("TRANSITION", TRANSITION_SOUND_PATH);
 	data_->assets.loadSound("APPLAUSE", APPLAUSE_SOUND_PATH);
@@ -65,10 +65,6 @@ void SplashState::handleInput()
 	}
 }
 
-void SplashState::update(float dt)
-{
-}
+void SplashState::update() {}
 
-void SplashState::draw(float dt)
-{
-}
+void SplashState::draw() {}

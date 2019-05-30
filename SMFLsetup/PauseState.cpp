@@ -1,6 +1,10 @@
 #include "pch.h"
 
-PauseState::PauseState(GameDataRef data, std::string songName, const int score, const int maxCombo) : data_(std::move(data)), songName_(std::move(songName)), score_(score), maxCombo_(maxCombo)
+PauseState::PauseState(std::shared_ptr<GameData> data, std::string songName, const int score, const int maxCombo) :
+	data_(std::move(data)),
+	songName_(std::move(songName)),
+	score_(score),
+	maxCombo_(maxCombo)
 {
 	bg_.setTexture(data_->assets.getTexture("paused bg"));
 
@@ -37,11 +41,9 @@ void PauseState::handleInput()
 	}
 }
 
-void PauseState::update(float dt)
-{
-}
+void PauseState::update() {}
 
-void PauseState::draw(float dt)
+void PauseState::draw()
 {
 	data_->window.clear();
 	data_->window.draw(bg_);

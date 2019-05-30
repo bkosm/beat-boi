@@ -2,10 +2,10 @@
 
 Settings::Settings()
 {
-	hit1 = sf::Keyboard::Key::Z;
-	hit2 = sf::Keyboard::Key::X;
-	hit3 = sf::Keyboard::Key::C;
-	hit4 = sf::Keyboard::Key::V;
+	hit1 = sf::Keyboard::Key::C;
+	hit2 = sf::Keyboard::Key::V;
+	hit3 = sf::Keyboard::Key::Period;
+	hit4 = sf::Keyboard::Key::Slash;
 	volumeUp = sf::Keyboard::Key::Equal;
 	volumeDown = sf::Keyboard::Key::Hyphen;
 	speedUp = sf::Keyboard::Key::RBracket;
@@ -16,15 +16,15 @@ void Settings::resetKeyBindings()
 {
 	hit1 = sf::Keyboard::Key::Z;
 	hit2 = sf::Keyboard::Key::X;
-	hit3 = sf::Keyboard::Key::C;
-	hit4 = sf::Keyboard::Key::V;
+	hit3 = sf::Keyboard::Key::Period;
+	hit4 = sf::Keyboard::Key::Slash;
 	volumeUp = sf::Keyboard::Key::Equal;
 	volumeDown = sf::Keyboard::Key::Hyphen;
 	speedUp = sf::Keyboard::Key::RBracket;
 	speedDown = sf::Keyboard::Key::LBracket;
 }
 
-Hitmarker::Hitmarker(const sf::Texture& texture, bool hit)
+Hitmarker::Hitmarker(const sf::Texture& texture, const bool hit)
 {
 	sprite.setTexture(texture);
 	isHit = hit;
@@ -32,14 +32,10 @@ Hitmarker::Hitmarker(const sf::Texture& texture, bool hit)
 
 bool Hitmarker::hasEmptyTex() const
 {
-	if (sprite.getTexture()->getSize().x == 1)
-	{
-		return true;
-	}
-	return false;
+	return sprite.getTexture()->getSize().x == 1;
 }
 
-Game::Game(unsigned width, unsigned height, const std::string& title)
+Game::Game(const unsigned width, const unsigned height, const std::string& title)
 {
 	data_->window.create(sf::VideoMode(width, height), title, sf::Style::Close);
 	data_->maschine.addState(std::unique_ptr<State>(std::make_unique<SplashState>(data_)), false);
@@ -73,11 +69,11 @@ void Game::run() const
 		while (accumulator >= dt_)
 		{
 			data_->maschine.getActiveState()->handleInput();
-			data_->maschine.getActiveState()->update(dt_);
+			data_->maschine.getActiveState()->update();
 
 			accumulator -= dt_;
 		}
-		const float interpolation = accumulator / dt_;
-		data_->maschine.getActiveState()->draw(interpolation);
+
+		data_->maschine.getActiveState()->draw();
 	}
 }

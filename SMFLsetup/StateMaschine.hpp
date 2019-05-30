@@ -2,23 +2,21 @@
 #include "State.hpp"
 #include <stack>
 
-typedef std::unique_ptr<State> StateRef;
-
 class StateMaschine
 {
 public:
 	StateMaschine() = default;
 	~StateMaschine() = default;
 
-	void addState(StateRef new_state, bool is_replacing);
+	void addState(std::unique_ptr<State> new_state, bool is_replacing);
 	void removeState();
 	void processStateChanges();
 
-	StateRef& getActiveState();
+	std::unique_ptr<State>& getActiveState();
 
 private:
-	StateRef newState_;
-	std::stack<StateRef> states_;
+	std::unique_ptr<State> newState_;
+	std::stack<std::unique_ptr<State>> states_;
 
 	bool isRemoving_{}, isAdding_{}, isReplacing_{};
 };

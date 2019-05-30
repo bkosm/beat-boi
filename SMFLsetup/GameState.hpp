@@ -3,14 +3,14 @@
 class GameState : public State
 {
 public:
-	GameState(GameDataRef data, std::string songName);
+	GameState(std::shared_ptr<GameData> data, std::string songName);
 
 	void handleInput() override;
-	void update(float dt) override;
-	void draw(float dt) override;
+	void update() override;
+	void draw() override;
 
 private:
-	GameDataRef data_;
+	std::shared_ptr<GameData> data_;
 
 	std::vector<std::vector<Hitmarker>> chart_{}, onScreen_{};
 	EffectParticles particles_;

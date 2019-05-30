@@ -3,14 +3,14 @@
 class KeyBindingState : public State
 {
 public:
-	KeyBindingState(GameDataRef data);
+	KeyBindingState(std::shared_ptr<GameData> data);
 
 	void handleInput() override;
-	void update(float dt) override;
-	void draw(float dt) override;
+	void update() override;
+	void draw() override;
 
 private:
-	GameDataRef data_;
+	std::shared_ptr<GameData> data_;
 
 	sf::Sprite bg_;
 };

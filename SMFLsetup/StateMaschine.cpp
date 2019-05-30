@@ -1,6 +1,6 @@
 #include "pch.h"
 
-void StateMaschine::addState(StateRef new_state, const bool is_replacing)
+void StateMaschine::addState(std::unique_ptr<State> new_state, const bool is_replacing)
 {
 	isAdding_ = true;
 	isReplacing_ = is_replacing;
@@ -17,12 +17,6 @@ void StateMaschine::processStateChanges()
 	if (isRemoving_ && !states_.empty())
 	{
 		states_.pop();
-
-		if (!states_.empty())
-		{
-			states_.top()->resume();
-		}
-
 		isRemoving_ = false;
 	}
 	if (isAdding_)
@@ -33,18 +27,13 @@ void StateMaschine::processStateChanges()
 			{
 				states_.pop();
 			}
-			else
-			{
-				states_.top()->pause();
-			}
 		}
-
 		states_.push(std::move(newState_));
 		isAdding_ = false;
 	}
 }
 
-StateRef& StateMaschine::getActiveState()
+std::unique_ptr<State>& StateMaschine::getActiveState()
 {
 	return states_.top();
 }

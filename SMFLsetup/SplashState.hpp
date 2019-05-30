@@ -3,14 +3,14 @@
 class SplashState : public State
 {
 public:
-	SplashState(GameDataRef data);
+	SplashState(std::shared_ptr<GameData> data);
 
 	void handleInput() override;
-	void update(float dt) override;
-	void draw(float dt) override;
+	void update() override;
+	void draw() override;
 
 private:
-	GameDataRef data_;
+	std::shared_ptr<GameData> data_;
 
 	sf::Sprite bg_;
 };

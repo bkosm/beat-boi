@@ -3,14 +3,14 @@
 class PauseState : public State
 {
 public:
-	PauseState(GameDataRef data, std::string songName, int score, int maxCombo);
+	PauseState(std::shared_ptr<GameData> data, std::string songName, int score, int maxCombo);
 
 	void handleInput() override;
-	void update(float dt) override;
-	void draw(float dt) override;
+	void update() override;
+	void draw() override;
 
 private:
-	GameDataRef data_;
+	std::shared_ptr<GameData> data_;
 
 	sf::Sprite bg_;
 	sf::RectangleShape restart_, exit_;

@@ -1,6 +1,8 @@
 #include "pch.h"
 
-OptionsState::OptionsState(GameDataRef data, std::string songName) : data_(std::move(data)), songName_(std::move(songName))
+OptionsState::OptionsState(std::shared_ptr<GameData> data, std::string songName) :
+	data_(std::move(data)),
+	songName_(std::move(songName))
 {
 	bg_.setTexture(data_->assets.getTexture("options bg"));
 
@@ -51,11 +53,9 @@ void OptionsState::handleInput()
 	}
 }
 
-void OptionsState::update(float dt)
-{
-}
+void OptionsState::update() {}
 
-void OptionsState::draw(float dt)
+void OptionsState::draw()
 {
 	data_->window.clear();
 	data_->window.draw(bg_);

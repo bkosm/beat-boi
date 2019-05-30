@@ -34,8 +34,6 @@ struct GameData
 	sf::Sound transitionSound, applauseSound;
 };
 
-typedef std::shared_ptr<GameData> GameDataRef;
-
 class Game
 {
 public:
@@ -48,7 +46,7 @@ private:
 	const float dt_ = FRAMERATE;
 
 	sf::Clock clock_;
-	GameDataRef data_ = std::make_shared<GameData>();
+	std::shared_ptr<GameData> data_ = std::make_shared<GameData>();
 
 	void run() const;
 };

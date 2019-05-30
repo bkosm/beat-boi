@@ -1,6 +1,6 @@
 #include "pch.h"
 
-MainMenuState::MainMenuState(GameDataRef data) : data_(std::move(data))
+MainMenuState::MainMenuState(std::shared_ptr<GameData> data) : data_(std::move(data))
 {
 	bg_.setTexture(data_->assets.getTexture("menu bg"));
 
@@ -8,11 +8,6 @@ MainMenuState::MainMenuState(GameDataRef data) : data_(std::move(data))
 	enteredText_.setCharacterSize(45);
 	enteredText_.setFillColor(sf::Color::Black);
 	enteredText_.setPosition(float(WIN_RES.x * 0.5), float(WIN_RES.y * 0.7));
-
-	if (data_->backgroundMusic.getStatus() == sf::Music::Stopped)
-	{
-		data_->backgroundMusic.play();
-	}
 }
 
 void MainMenuState::handleInput()
@@ -36,7 +31,7 @@ void MainMenuState::handleInput()
 	}
 }
 
-void MainMenuState::update(float dt)
+void MainMenuState::update()
 {
 	enteredText_.setOrigin(enteredText_.getGlobalBounds().width / 2, enteredText_.getGlobalBounds().height / 2);
 	enteredText_.setString(stringEntered_);
@@ -52,10 +47,13 @@ void MainMenuState::update(float dt)
 	{
 		data_->window.close();
 	}
-
+	if (data_->backgroundMusic.getStatus() == sf::Music::Stopped)
+	{
+		data_->backgroundMusic.play();
+	}
 }
 
-void MainMenuState::draw(float dt)
+void MainMenuState::draw()
 {
 	data_->window.clear();
 	data_->window.draw(bg_);

@@ -1,7 +1,11 @@
 #include "pch.h"
 #include <regex>
 
-EndGameState::EndGameState(GameDataRef data, std::string songName, const int score, const int combo) : data_(std::move(data)), songName_(std::move(songName)), score_(score), combo_(combo)
+EndGameState::EndGameState(std::shared_ptr<GameData> data, std::string songName, const int score, const int combo) :
+	data_(std::move(data)),
+	songName_(std::move(songName)),
+	score_(score),
+	combo_(combo)
 {
 	data_->applauseSound.play();
 
@@ -70,11 +74,9 @@ void EndGameState::handleInput()
 	}
 }
 
-void EndGameState::update(float dt)
-{
-}
+void EndGameState::update() {}
 
-void EndGameState::draw(float dt)
+void EndGameState::draw()
 {
 	data_->window.clear();
 	data_->window.draw(bg_);

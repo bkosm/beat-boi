@@ -1,7 +1,9 @@
 #include "pch.h"
 #include <iostream>
 
-GameState::GameState(GameDataRef data, std::string songName) : data_(std::move(data)), songName_(std::move(songName))
+GameState::GameState(std::shared_ptr<GameData> data, std::string songName) :
+	data_(std::move(data)),
+	songName_(std::move(songName))
 {
 	genDots_();
 
@@ -97,7 +99,7 @@ void GameState::handleInput()
 	}
 }
 
-void GameState::update(float dt)
+void GameState::update()
 {
 	if (gameClock_.getElapsedTime().asSeconds() > musicDuration_)
 	{
@@ -111,7 +113,7 @@ void GameState::update(float dt)
 	particles_.updateAll();
 }
 
-void GameState::draw(float dt)
+void GameState::draw()
 {
 	data_->window.clear();
 

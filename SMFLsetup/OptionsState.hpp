@@ -3,14 +3,14 @@
 class OptionsState : public State
 {
 public:
-	OptionsState(GameDataRef data, std::string songName);
+	OptionsState(std::shared_ptr<GameData> data, std::string songName);
 
 	void handleInput() override;
-	void update(float dt) override;
-	void draw(float dt) override;
+	void update() override;
+	void draw() override;
 
 private:
-	GameDataRef data_;
+	std::shared_ptr<GameData> data_;
 
 	sf::Sprite bg_;
 	sf::RectangleShape play_, viewKeys_, return_;

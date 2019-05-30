@@ -1,7 +1,11 @@
 #include "pch.h"
 #include <iostream>
 
-HitParticles::HitParticles(const unsigned count) : particles_(count), vertices_(sf::Points, count), lifetime_(sf::seconds(3.f)), emitter_(0.f, 0.f)
+HitParticles::HitParticles(const unsigned count) :
+	particles_(count),
+	vertices_(sf::Points, count),
+	lifetime_(sf::seconds(3.f)),
+	emitter_(0.f, 0.f)
 {
 }
 
@@ -46,7 +50,11 @@ void HitParticles::resetParticle_(const std::size_t index)
 	vertices_[index].position = emitter_;
 }
 
-EffectParticles::EffectParticles() : one(NMBR_OF_PARTICLES), two(NMBR_OF_PARTICLES), three(NMBR_OF_PARTICLES), four(NMBR_OF_PARTICLES)
+EffectParticles::EffectParticles() :
+	one(NMBR_OF_PARTICLES),
+	two(NMBR_OF_PARTICLES),
+	three(NMBR_OF_PARTICLES),
+	four(NMBR_OF_PARTICLES)
 {
 }
 
