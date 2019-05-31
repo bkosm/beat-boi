@@ -1,11 +1,11 @@
 #include "pch.h"
-#include <iostream>
 
-HitParticles::HitParticles(const unsigned count) :
+HitParticles::HitParticles(const unsigned count, const sf::Color color) :
 	particles_(count),
 	vertices_(sf::Points, count),
 	lifetime_(sf::seconds(3.f)),
-	emitter_(0.f, 0.f)
+	emitter_(0.f, 0.f),
+	color_(color)
 {
 }
 
@@ -48,14 +48,20 @@ void HitParticles::resetParticle_(const std::size_t index)
 	particles_[index].lifetime = sf::milliseconds((std::rand() % 2000) + 1000);
 
 	vertices_[index].position = emitter_;
+	vertices_[index].color = color_;
 }
 
 EffectParticles::EffectParticles() :
-	one(NMBR_OF_PARTICLES),
-	two(NMBR_OF_PARTICLES),
-	three(NMBR_OF_PARTICLES),
-	four(NMBR_OF_PARTICLES)
+	one(NMBR_OF_PARTICLES, sf::Color(0, 180, 240)),
+	two(NMBR_OF_PARTICLES, sf::Color::Green),
+	three(NMBR_OF_PARTICLES, sf::Color::Red),
+	four(NMBR_OF_PARTICLES, sf::Color::Yellow)
 {
+}
+
+bool EffectParticles::isBeatValid() const
+{
+	return drawOne || drawTwo || drawThree || drawFour;
 }
 
 void EffectParticles::updateAll()

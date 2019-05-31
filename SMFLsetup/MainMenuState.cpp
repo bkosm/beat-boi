@@ -8,6 +8,11 @@ MainMenuState::MainMenuState(std::shared_ptr<GameData> data) : data_(std::move(d
 	enteredText_.setCharacterSize(45);
 	enteredText_.setFillColor(sf::Color::Black);
 	enteredText_.setPosition(float(WIN_RES.x * 0.5), float(WIN_RES.y * 0.7));
+	
+	if (data_->backgroundMusic.getStatus() == sf::Music::Stopped)
+	{
+		data_->backgroundMusic.play();
+	}
 }
 
 void MainMenuState::handleInput()
@@ -46,10 +51,6 @@ void MainMenuState::update()
 	if (stringEntered_ == "exit")
 	{
 		data_->window.close();
-	}
-	if (data_->backgroundMusic.getStatus() == sf::Music::Stopped)
-	{
-		data_->backgroundMusic.play();
 	}
 }
 

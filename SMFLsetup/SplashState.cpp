@@ -20,6 +20,7 @@ SplashState::SplashState(std::shared_ptr<GameData> data) : data_(std::move(data)
 	data_->assets.loadTexture("dot 2", DOT2_PATH);
 	data_->assets.loadTexture("dot 3", DOT3_PATH);
 	data_->assets.loadTexture("dot 4", DOT4_PATH);
+	data_->assets.loadTexture("dot hit", DOT_HIT_PATH);
 	data_->assets.loadTexture("hit off", HIT_OFF_PATH);
 	data_->assets.loadTexture("hit 1 on", HIT1_ON_PATH);
 	data_->assets.loadTexture("hit 2 on", HIT2_ON_PATH);
@@ -55,13 +56,6 @@ void SplashState::handleInput()
 			data_->transitionSound.play();
 			data_->maschine.addState(std::make_unique<MainMenuState>(data_), true);
 		}
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
-	{
-		data_->backgroundMusic.stop();
-		data_->songsData.loadSong("xremix");
-		data_->maschine.addState(std::make_unique<GameState>(data_, "xremix"), true);
 	}
 }
 

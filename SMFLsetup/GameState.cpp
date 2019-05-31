@@ -9,10 +9,10 @@ GameState::GameState(std::shared_ptr<GameData> data, std::string songName) :
 
 	bg_.setTexture(data_->assets.getTexture("game bg"));
 
-	firstHitter_.setPosition(float(WIN_RES.x * 0.1188), float(WIN_RES.y * 0.8));
-	secondHitter_.setPosition(float(WIN_RES.x * 0.282), float(WIN_RES.y * 0.8));
-	thirdHitter_.setPosition(float(WIN_RES.x * 0.445), float(WIN_RES.y * 0.8));
-	fourthHitter_.setPosition(float(WIN_RES.x * 0.607), float(WIN_RES.y * 0.8));
+	firstHitter_.setPosition(float(WIN_RES.x * 0.1188), float(WIN_RES.y * 0.75));
+	secondHitter_.setPosition(float(WIN_RES.x * 0.282), float(WIN_RES.y * 0.75));
+	thirdHitter_.setPosition(float(WIN_RES.x * 0.445), float(WIN_RES.y * 0.75));
+	fourthHitter_.setPosition(float(WIN_RES.x * 0.607), float(WIN_RES.y * 0.75));
 
 	scoreText_.setFont(data_->assets.getFont("MAIN"));
 	scoreText_.setOrigin(scoreText_.getGlobalBounds().width, scoreText_.getGlobalBounds().height);
@@ -31,7 +31,7 @@ GameState::GameState(std::shared_ptr<GameData> data, std::string songName) :
 	particles_.four.setEmitter(sf::Vector2f(fourthHitter_.getPosition().x + fourthHitter_.getGlobalBounds().width / 2, fourthHitter_.getPosition().y + fourthHitter_.getGlobalBounds().height / 2));
 
 	hitSound_.setBuffer(data_->songsData.getSong(songName_).hitSound);
-	hitSound_.setVolume(10);
+	hitSound_.setVolume(8);
 
 	scrollSpeed_ = 5;
 	musicDuration_ = data_->songsData.getSong(songName_).music.getDuration().asSeconds();
@@ -140,10 +140,11 @@ void GameState::updateScore_()
 			int currentScore = 0;
 			if (InputManager::scoreCollision(dots[0].sprite, firstHitter_) && !dots[0].isHit && !dots[0].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit1))
 			{
-				dots[0].isHit = true;
 				combo_++;
 				currentScore += 5 + combo_;
 				particles_.drawOne = true;
+				dots[0].isHit = true;
+				dots[0].sprite.setTexture(data_->assets.getTexture("dot hit"));
 			}
 			else if (InputManager::scoreCollision(dots[0].sprite, firstHitter_) && dots[0].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit1))
 			{
@@ -152,10 +153,11 @@ void GameState::updateScore_()
 			}
 			if (InputManager::scoreCollision(dots[1].sprite, secondHitter_) && !dots[1].isHit && !dots[1].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit2))
 			{
-				dots[1].isHit = true;
 				combo_++;
 				currentScore += 5 + combo_;
 				particles_.drawTwo = true;
+				dots[1].isHit = true;
+				dots[1].sprite.setTexture(data_->assets.getTexture("dot hit"));
 			}
 			else if (InputManager::scoreCollision(dots[1].sprite, secondHitter_) && dots[1].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit2))
 			{
@@ -164,10 +166,11 @@ void GameState::updateScore_()
 			}
 			if (InputManager::scoreCollision(dots[2].sprite, thirdHitter_) && !dots[2].isHit && !dots[2].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit3))
 			{
-				dots[2].isHit = true;
 				combo_++;
 				currentScore += 5 + combo_;
 				particles_.drawThree = true;
+				dots[2].isHit = true;
+				dots[2].sprite.setTexture(data_->assets.getTexture("dot hit"));
 			}
 			else if (InputManager::scoreCollision(dots[2].sprite, thirdHitter_) && dots[2].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit3))
 			{
@@ -176,10 +179,11 @@ void GameState::updateScore_()
 			}
 			if (InputManager::scoreCollision(dots[3].sprite, fourthHitter_) && !dots[3].isHit && !dots[3].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit4))
 			{
-				dots[3].isHit = true;
 				combo_++;
 				currentScore += 5 + combo_;
 				particles_.drawFour = true;
+				dots[3].isHit = true;
+				dots[3].sprite.setTexture(data_->assets.getTexture("dot hit"));
 			}
 			else if (InputManager::scoreCollision(dots[3].sprite, fourthHitter_) && dots[3].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit4))
 			{
@@ -192,8 +196,9 @@ void GameState::updateScore_()
 				particles_.dontDraw();
 				combo_ = 0;
 			}
-			else
+			else if (currentScore > 0 && particles_.isBeatValid())
 			{
+				hitSound_.play();
 				score_ += currentScore;
 			}
 		}

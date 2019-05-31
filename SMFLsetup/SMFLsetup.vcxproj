@@ -202,10 +202,18 @@
     <ClInclude Include="OptionsState.hpp" />
     <ClInclude Include="PauseState.hpp" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
     <ClInclude Include="SongsData.hpp" />
     <ClInclude Include="SplashState.hpp" />
     <ClInclude Include="State.hpp" />
     <ClInclude Include="StateMaschine.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="BeatBoi1.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\pictures\bbIcon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

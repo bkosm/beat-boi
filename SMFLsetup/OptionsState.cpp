@@ -33,7 +33,7 @@ void OptionsState::handleInput()
 		}
 	}
 
-	if (InputManager::isShapeClicked(play_, sf::Mouse::Left, data_->window) && !clicked_)
+	if (InputManager::isShapeClicked(play_, sf::Mouse::Left, data_->window) && !clicked_ || sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 	{
 		clicked_ = true;
 		data_->songsData.getSong(songName_).music.stop();
