@@ -36,7 +36,7 @@ void MainMenuState::handleInput()
 	}
 }
 
-void MainMenuState::update()
+void MainMenuState::update(const float dt)
 {
 	enteredText_.setOrigin(enteredText_.getGlobalBounds().width / 2, enteredText_.getGlobalBounds().height / 2);
 	enteredText_.setString(stringEntered_);

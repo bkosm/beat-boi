@@ -79,7 +79,7 @@ void GameState::handleInput()
 	}
 }
 
-void GameState::update()
+void GameState::update(const float dt)
 {
 	if (gameClock_.getElapsedTime().asSeconds() > musicDuration_)
 	{
@@ -87,7 +87,7 @@ void GameState::update()
 	}
 
 	animateHitmarkers_();
-	updateDots_();
+	updateDots_(dt);
 	updateScore_();
 
 	particles_.updateAll();
@@ -266,12 +266,14 @@ void GameState::drawDots_()
 	}
 }
 
-void GameState::updateDots_()
+void GameState::updateDots_(const float dt)
 {
-	if (songClock_.getElapsedTime().asSeconds() > data_->songsData.getSong(songName_).beatDuration && !chart_.empty())
+	timeAccumulator_ += dt;
+	if (songClock_.getElapsedTime().asSeconds() + timeAccumulator_ > data_->songsData.getSong(songName_).beatDuration && !chart_.empty())
 	{
 		onScreen_.emplace_back(chart_[0]);
 		chart_.erase(chart_.begin());
+		timeAccumulator_ = 0.0f;
 		songClock_.restart();
 	}
 

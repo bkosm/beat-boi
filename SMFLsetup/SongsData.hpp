@@ -17,7 +17,7 @@ struct Song
 class SongsData
 {
 public:
-	SongsData() = default;
+	SongsData();
 	~SongsData() = default;
 
 	void unloadSongs();
@@ -26,5 +26,6 @@ public:
 
 private:
 	std::map<std::string, Song> songContainer_;
+	float tempoCorrection_{};
 };
 

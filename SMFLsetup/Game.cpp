@@ -34,7 +34,7 @@ void Game::run() const
 		while (accumulator >= dt_)
 		{
 			data_->maschine.getActiveState()->handleInput();
-			data_->maschine.getActiveState()->update();
+			data_->maschine.getActiveState()->update(dt_);
 
 			accumulator -= dt_;
 		}

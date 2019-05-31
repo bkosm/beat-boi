@@ -6,7 +6,7 @@ bool SongsData::loadSong(const std::string& songName)
 	if (!songContainer_[songName].loaded)
 	{
 		float readBpm{};
-		std::ifstream input("./data/" + songName + "/data.bin");
+		std::ifstream input("./data/songs/" + songName + "/data.bin");
 		if (input.is_open())
 		{
 			input >> readBpm;
@@ -41,15 +41,31 @@ bool SongsData::loadSong(const std::string& songName)
 			return false;
 		}
 
-		readBpm *= TEMPO_CORRECTION;
+		readBpm *= tempoCorrection_;
 
-		songContainer_[songName].music.openFromFile("./data/" + songName + "/music.wav");
-		songContainer_[songName].hitSound.loadFromFile("./data/" + songName + "/hitsound.wav");
+		songContainer_[songName].music.openFromFile("./data/songs/" + songName + "/music.wav");
+		songContainer_[songName].hitSound.loadFromFile("./data/songs/" + songName + "/hitsound.wav");
 		songContainer_[songName].bpm = readBpm;
 		songContainer_[songName].beatDuration = 60.0f / readBpm;
 		songContainer_[songName].loaded = true;
 	}
 	return true;
+}
+
+SongsData::SongsData()
+{
+	std::ifstream input("./data/offset.bb");
+	if (input.is_open())
+	{
+		input >> tempoCorrection_;
+		std::cout << tempoCorrection_ << std::endl;
+		input.close();
+	}
+	else
+	{
+		input.close();
+		tempoCorrection_ = 1.01f;
+	}
 }
 
 void SongsData::unloadSongs()

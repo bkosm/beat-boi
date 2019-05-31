@@ -6,7 +6,7 @@ public:
 	PauseState(std::shared_ptr<GameData> data, std::string songName, int score, int maxCombo);
 
 	void handleInput() override;
-	void update() override;
+	void update(float dt) override;
 	void draw() override;
 
 private:

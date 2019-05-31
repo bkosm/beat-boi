@@ -44,7 +44,7 @@ void KeyBindingState::handleInput()
 	}
 }
 
-void KeyBindingState::update()
+void KeyBindingState::update(const float dt)
 {
 	speedText_.setString(std::to_string(data_->settings.scrollSpeed));
 	speedText_.setOrigin(speedText_.getGlobalBounds().width / 2, 0);

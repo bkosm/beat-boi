@@ -6,7 +6,7 @@ public:
 	MainMenuState(std::shared_ptr<GameData> data);
 
 	void handleInput() override;
-	void update() override;
+	void update(float dt) override;
 	void draw() override;
 
 private:

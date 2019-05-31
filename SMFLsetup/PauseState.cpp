@@ -41,7 +41,7 @@ void PauseState::handleInput()
 	}
 }
 
-void PauseState::update() {}
+void PauseState::update(const float dt) {}
 
 void PauseState::draw()
 {

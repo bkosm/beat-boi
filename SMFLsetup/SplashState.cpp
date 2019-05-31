@@ -59,6 +59,6 @@ void SplashState::handleInput()
 	}
 }
 
-void SplashState::update() {}
+void SplashState::update(const float dt) {}
 
 void SplashState::draw() {}

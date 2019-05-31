@@ -76,7 +76,7 @@ void EndGameState::handleInput()
 	}
 }
 
-void EndGameState::update() {}
+void EndGameState::update(const float dt) {}
 
 void EndGameState::draw()
 {

@@ -6,7 +6,7 @@ public:
 	GameState(std::shared_ptr<GameData> data, std::string songName);
 
 	void handleInput() override;
-	void update() override;
+	void update(float dt) override;
 	void draw() override;
 
 private:
@@ -21,11 +21,11 @@ private:
 
 	std::string songName_;
 	int score_{ 0 }, combo_{ 0 }, maxCombo_{ 0 };
-	float musicDuration_{}, currentVolume_{ 100.f };
+	float musicDuration_{}, currentVolume_{ 100.f }, timeAccumulator_{ 0.0f };
 
 	void animateHitmarkers_();
 	void updateScore_();
 	void genDots_();
 	void drawDots_();
-	void updateDots_();
+	void updateDots_(float dt);
 };

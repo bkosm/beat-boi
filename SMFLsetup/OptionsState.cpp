@@ -53,7 +53,7 @@ void OptionsState::handleInput()
 	}
 }
 
-void OptionsState::update() {}
+void OptionsState::update(const float dt) {}
 
 void OptionsState::draw()
 {
