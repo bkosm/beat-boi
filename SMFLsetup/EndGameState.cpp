@@ -93,74 +93,78 @@ void EndGameState::draw()
 
 void EndGameState::processBestScore_()
 {
-	std::ifstream input("./data/scores.bb");
-	if (input.is_open())
+	if (!processed_)
 	{
-		std::string file;
-		while (!input.eof())
+		processed_ = true;
+		std::ifstream input("./data/scores.bb");
+		if (input.is_open())
 		{
-			std::string toAppend;
-			input >> toAppend;
-			file += toAppend + '\n';
-		}
-		input.close();
-		std::regex ex(songName_ + R"(\s(\d*)\s(\d*))");
-		std::smatch match;
-		if (std::regex_search(file, match, ex))
-		{
-			if (std::stoi(match.str(1)) > score_) //Old highscore
+			std::string file;
+			while (!input.eof())
 			{
-				bestScore_ = match.str(1);
-				bestCombo_ = match.str(2);
+				std::string toAppend;
+				input >> toAppend;
+				file += toAppend + '\n';
 			}
-			else //Overwrite highscore
+			input.close();
+			std::regex ex(songName_ + R"(\s(\d*)\s(\d*))");
+			std::smatch match;
+			if (std::regex_search(file, match, ex))
+			{
+				if (std::stoi(match.str(1)) > score_) //Old highscore
+				{
+					bestScore_ = match.str(1);
+					bestCombo_ = match.str(2);
+				}
+				else //Overwrite highscore
+				{
+					bestScore_ = "NEW";
+					bestCombo_ = "BEST!";
+					input.open("./data/scores.bb");
+					std::ofstream rewrite("./data/scoresTemp.bb");
+					if (input.is_open() && rewrite.is_open())
+					{
+						std::string toReplace = match.str(1), replacing = std::to_string(score_), temp;
+						while (input >> temp)
+						{
+							if (temp == toReplace)
+							{
+								temp = replacing;
+								toReplace = match.str(2);
+								replacing = std::to_string(combo_);
+							}
+							rewrite << temp + '\n';
+						}
+						input.close();
+						rewrite.close();
+						std::remove("./data/scores.bb");
+						std::rename("./data/scoresTemp.bb", "./data/scores.bb");
+					}
+				}
+			}
+			else //New highscore
 			{
 				bestScore_ = "NEW";
 				bestCombo_ = "BEST!";
-				input.open("./data/scores.bb");
-				std::ofstream rewrite("./data/scoresTemp.bb");
-				if (input.is_open() && rewrite.is_open())
+				std::ofstream output("./data/scores.bb", std::ios::app);
+				if (output.is_open())
 				{
-					std::string toReplace = match.str(1), replacing = std::to_string(score_), temp;
-					while (input >> temp)
-					{
-						if (temp == toReplace)
-						{
-							temp = replacing;
-							toReplace = match.str(2);
-							replacing = std::to_string(combo_);
-						}
-						rewrite << temp + '\n';
-					}
-					input.close();
-					rewrite.close();
-					std::remove("./data/scores.bb");
-					std::rename("./data/scoresTemp.bb", "./data/scores.bb");
+					output << songName_ + '\n' + std::to_string(score_) + '\n' + std::to_string(combo_) + '\n';
 				}
+				output.close();
 			}
 		}
-		else //New highscore
+		else //Error reading file
 		{
-			bestScore_ = "NEW";
-			bestCombo_ = "BEST!";
-			std::ofstream output("./data/scores.bb", std::ios::app);
-			if (output.is_open())
-			{
-				output << songName_ + '\n' + std::to_string(score_) + '\n' + std::to_string(combo_) + '\n';
-			}
-			output.close();
-		}
-	}
-	else //Error reading file
-	{
-		bestScore_ = "scores file";
-		bestCombo_ = "missing!";
+			bestScore_ = "scores file";
+			bestCombo_ = "missing!";
 
-		std::ofstream out("./data/scores.bb");
-		if (out.is_open())
-		{
-			out << "";
+			std::ofstream out("./data/scores.bb");
+			if (out.is_open())
+			{
+				out << "";
+			}
+			out.close();
 		}
-		out.close();
 	}
 }

@@ -238,7 +238,7 @@ void GameState::genDots_()
 			temp.emplace_back(dot3);
 		}
 
-		if (data_->songsData.getSong(songName_).chart.fourthRow[0] == true) {
+		if (data_->songsData.getSong(songName_).chart.fourthRow[i] == true) {
 			Hitmarker dot4(data_->assets.getTexture("dot 4"));
 			dot4.sprite.setPosition(float(WIN_RES.x * 0.607), -dot4.sprite.getGlobalBounds().height);
 			temp.emplace_back(dot4);

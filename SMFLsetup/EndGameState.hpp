@@ -18,7 +18,7 @@ private:
 
 	std::string songName_, bestScore_, bestCombo_;
 	int score_, combo_;
-	bool clicked_{ false };
+	bool clicked_{ false }, processed_{ false };
 
 	void processBestScore_();
 };
