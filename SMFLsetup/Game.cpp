@@ -1,40 +1,5 @@
 #include "pch.h"
 
-Settings::Settings()
-{
-	hit1 = sf::Keyboard::Key::C;
-	hit2 = sf::Keyboard::Key::V;
-	hit3 = sf::Keyboard::Key::Period;
-	hit4 = sf::Keyboard::Key::Slash;
-	volumeUp = sf::Keyboard::Key::Equal;
-	volumeDown = sf::Keyboard::Key::Hyphen;
-	speedUp = sf::Keyboard::Key::RBracket;
-	speedDown = sf::Keyboard::Key::LBracket;
-}
-
-void Settings::resetKeyBindings()
-{
-	hit1 = sf::Keyboard::Key::Z;
-	hit2 = sf::Keyboard::Key::X;
-	hit3 = sf::Keyboard::Key::Period;
-	hit4 = sf::Keyboard::Key::Slash;
-	volumeUp = sf::Keyboard::Key::Equal;
-	volumeDown = sf::Keyboard::Key::Hyphen;
-	speedUp = sf::Keyboard::Key::RBracket;
-	speedDown = sf::Keyboard::Key::LBracket;
-}
-
-Hitmarker::Hitmarker(const sf::Texture& texture, const bool hit)
-{
-	sprite.setTexture(texture);
-	isHit = hit;
-}
-
-bool Hitmarker::hasEmptyTex() const
-{
-	return sprite.getTexture()->getSize().x == 1;
-}
-
 Game::Game(const unsigned width, const unsigned height, const std::string& title)
 {
 	data_->window.create(sf::VideoMode(width, height), title, sf::Style::Close);

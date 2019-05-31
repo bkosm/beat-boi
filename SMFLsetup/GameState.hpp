@@ -21,7 +21,7 @@ private:
 
 	std::string songName_;
 	int score_{ 0 }, combo_{ 0 }, maxCombo_{ 0 };
-	float scrollSpeed_{}, musicDuration_{}, currentVolume_{ 100.f };
+	float musicDuration_{}, currentVolume_{ 100.f };
 
 	void animateHitmarkers_();
 	void updateScore_();

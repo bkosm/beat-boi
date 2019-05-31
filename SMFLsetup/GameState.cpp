@@ -1,5 +1,4 @@
 #include "pch.h"
-#include <iostream>
 
 GameState::GameState(std::shared_ptr<GameData> data, std::string songName) :
 	data_(std::move(data)),
@@ -33,7 +32,6 @@ GameState::GameState(std::shared_ptr<GameData> data, std::string songName) :
 	hitSound_.setBuffer(data_->songsData.getSong(songName_).hitSound);
 	hitSound_.setVolume(8);
 
-	scrollSpeed_ = 5;
 	musicDuration_ = data_->songsData.getSong(songName_).music.getDuration().asSeconds();
 
 	data_->songsData.getSong(songName_).music.play();
@@ -59,7 +57,7 @@ void GameState::handleInput()
 			data_->maschine.addState(std::make_unique<PauseState>(data_, songName_, score_, maxCombo_), true);
 		}
 
-		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Key::Hyphen)
+		if (event.type == sf::Event::KeyPressed && event.key.code == data_->settings.volumeDown)
 		{
 			currentVolume_ -= 10.0f;
 			if (currentVolume_ < 0)
@@ -69,7 +67,7 @@ void GameState::handleInput()
 			data_->songsData.getSong(songName_).music.setVolume(currentVolume_);
 
 		}
-		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Key::Equal)
+		if (event.type == sf::Event::KeyPressed && event.key.code == data_->settings.volumeUp)
 		{
 			currentVolume_ += 10.0f;
 			if (currentVolume_ > 100)
@@ -77,24 +75,6 @@ void GameState::handleInput()
 				currentVolume_ = 100;
 			}
 			data_->songsData.getSong(songName_).music.setVolume(currentVolume_);
-		}
-
-		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Key::LBracket)
-		{
-			scrollSpeed_--;
-			if (scrollSpeed_ < 1)
-			{
-				scrollSpeed_ = 1;
-			}
-		}
-		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Key::RBracket)
-		{
-			scrollSpeed_++;
-			std::cout << scrollSpeed_ << std::endl;
-			if (scrollSpeed_ > 20)
-			{
-				scrollSpeed_ = 20;
-			}
 		}
 	}
 }
@@ -124,8 +104,8 @@ void GameState::draw()
 	data_->window.draw(secondHitter_);
 	data_->window.draw(fourthHitter_);
 	data_->window.draw(thirdHitter_);
-	particles_.draw(data_->window);
 	drawDots_();
+	particles_.draw(data_->window);
 
 	data_->window.display();
 }
@@ -290,16 +270,16 @@ void GameState::updateDots_()
 {
 	if (songClock_.getElapsedTime().asSeconds() > data_->songsData.getSong(songName_).beatDuration && !chart_.empty())
 	{
-		songClock_.restart();
 		onScreen_.emplace_back(chart_[0]);
 		chart_.erase(chart_.begin());
+		songClock_.restart();
 	}
 
 	for (auto& i : onScreen_)
 	{
 		for (auto& j : i)
 		{
-			j.sprite.move(0, scrollSpeed_);
+			j.sprite.move(0, data_->settings.scrollSpeed);
 			if (j.sprite.getPosition().y > WIN_RES.y)
 			{
 				for (const auto& dot : *onScreen_.begin())

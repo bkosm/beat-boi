@@ -62,13 +62,15 @@ void EndGameState::handleInput()
 		}
 	}
 
-	if (InputManager::isShapeClicked(restart_, sf::Mouse::Left, data_->window))
+	if (InputManager::isShapeClicked(restart_, sf::Mouse::Left, data_->window) && !clicked_ || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && !clicked_)
 	{
+		clicked_ = true;
 		data_->transitionSound.play();
-		data_->maschine.addState(std::make_unique<GameState>(data_, songName_), true);
+		data_->maschine.addState(std::make_unique<OptionsState>(data_, songName_), true);
 	}
-	if (InputManager::isShapeClicked(exit_, sf::Mouse::Left, data_->window))
+	if (InputManager::isShapeClicked(exit_, sf::Mouse::Left, data_->window) && !clicked_ || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && !clicked_)
 	{
+		clicked_ = true;
 		data_->transitionSound.play();
 		data_->maschine.addState(std::make_unique<MainMenuState>(data_), true);
 	}

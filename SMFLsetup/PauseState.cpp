@@ -32,7 +32,7 @@ void PauseState::handleInput()
 	if (InputManager::isShapeClicked(restart_, sf::Mouse::Left, data_->window))
 	{
 		data_->transitionSound.play();
-		data_->maschine.addState(std::make_unique<GameState>(data_, songName_), true);
+		data_->maschine.addState(std::make_unique<OptionsState>(data_, songName_), true);
 	}
 	if (InputManager::isShapeClicked(exit_, sf::Mouse::Left, data_->window))
 	{

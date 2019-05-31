@@ -12,5 +12,6 @@ public:
 private:
 	std::shared_ptr<GameData> data_;
 
+	sf::Text speedText_;
 	sf::Sprite bg_;
 };

@@ -3,24 +3,7 @@
 #include "AssetManager.hpp"
 #include "InputManager.hpp"
 #include "SongsData.hpp"
-
-struct Settings
-{
-	sf::Keyboard::Key hit1, hit2, hit3, hit4, speedUp, speedDown, volumeUp, volumeDown;
-
-	Settings();
-	void resetKeyBindings();
-};
-
-struct Hitmarker
-{
-	sf::Sprite sprite;
-	bool isHit{};
-
-	Hitmarker() = default;
-	Hitmarker(const sf::Texture& texture, bool hit = false);
-	bool hasEmptyTex() const;
-};
+#include "Misc.hpp"
 
 struct GameData
 {

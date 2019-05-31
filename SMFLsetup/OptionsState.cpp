@@ -33,7 +33,7 @@ void OptionsState::handleInput()
 		}
 	}
 
-	if (InputManager::isShapeClicked(play_, sf::Mouse::Left, data_->window) && !clicked_ || sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	if ((InputManager::isShapeClicked(play_, sf::Mouse::Left, data_->window) && !clicked_) || (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !clicked_))
 	{
 		clicked_ = true;
 		data_->songsData.getSong(songName_).music.stop();
@@ -45,7 +45,7 @@ void OptionsState::handleInput()
 		data_->transitionSound.play();
 		data_->maschine.addState(std::make_unique<KeyBindingState>(data_), false);
 	}
-	if (InputManager::isShapeClicked(return_, sf::Mouse::Left, data_->window))
+	if ((InputManager::isShapeClicked(return_, sf::Mouse::Left, data_->window) && !clicked_) || (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && !clicked_))
 	{
 		data_->songsData.getSong(songName_).music.stop();
 		data_->transitionSound.play();
