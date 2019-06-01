@@ -3,7 +3,7 @@
 struct Settings
 {
 	sf::Keyboard::Key hit1, hit2, hit3, hit4, volumeUp, volumeDown;
-	unsigned scrollSpeed{ 5 };
+	unsigned scrollSpeed{ 5 }, minumumScrollSpeed{ 0 };
 
 	Settings();
 	void resetSettings();

@@ -8,10 +8,10 @@ GameState::GameState(std::shared_ptr<GameData> data, std::string songName) :
 
 	bg_.setTexture(data_->assets.getTexture("game bg"));
 
-	firstHitter_.setPosition(float(WIN_RES.x * 0.1188), float(WIN_RES.y * 0.75));
-	secondHitter_.setPosition(float(WIN_RES.x * 0.282), float(WIN_RES.y * 0.75));
-	thirdHitter_.setPosition(float(WIN_RES.x * 0.445), float(WIN_RES.y * 0.75));
-	fourthHitter_.setPosition(float(WIN_RES.x * 0.607), float(WIN_RES.y * 0.75));
+	firstHitter_.setPosition(float(WIN_RES.x * 0.1188), float(WIN_RES.y * 0.7));
+	secondHitter_.setPosition(float(WIN_RES.x * 0.282), float(WIN_RES.y * 0.7));
+	thirdHitter_.setPosition(float(WIN_RES.x * 0.445), float(WIN_RES.y * 0.7));
+	fourthHitter_.setPosition(float(WIN_RES.x * 0.607), float(WIN_RES.y * 0.7));
 
 	scoreText_.setFont(data_->assets.getFont("MAIN"));
 	scoreText_.setOrigin(scoreText_.getGlobalBounds().width, scoreText_.getGlobalBounds().height);
@@ -282,7 +282,7 @@ void GameState::updateDots_(const float dt)
 		for (auto& j : i)
 		{
 			j.sprite.move(0, data_->settings.scrollSpeed);
-			if (j.sprite.getPosition().y > WIN_RES.y)
+			if (j.sprite.getPosition().y > firstHitter_.getPosition().y + firstHitter_.getGlobalBounds().height)
 			{
 				for (const auto& dot : *onScreen_.begin())
 				{

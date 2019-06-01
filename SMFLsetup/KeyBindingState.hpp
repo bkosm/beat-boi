@@ -3,7 +3,7 @@
 class KeyBindingState : public State
 {
 public:
-	KeyBindingState(std::shared_ptr<GameData> data);
+	KeyBindingState(std::shared_ptr<GameData> data, std::string songName);
 
 	void handleInput() override;
 	void update(float dt) override;
@@ -14,4 +14,6 @@ private:
 
 	sf::Text speedText_;
 	sf::Sprite bg_;
+
+	std::string songName_;
 };

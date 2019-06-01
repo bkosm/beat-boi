@@ -5,3 +5,4 @@
 ### gameplay calculations occur.
 ### The higher the value the more quickly dots scroll.
 ### Do not change it if there is no need.
+### It is being re-read each time the game loads a song.

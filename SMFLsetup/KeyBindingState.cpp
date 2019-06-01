@@ -1,6 +1,8 @@
 #include "pch.h"
 
-KeyBindingState::KeyBindingState(std::shared_ptr<GameData> data) : data_(std::move(data))
+KeyBindingState::KeyBindingState(std::shared_ptr<GameData> data, std::string songName) : 
+	data_(std::move(data)),
+	songName_(std::move(songName))
 {
 	bg_.setTexture(data_->assets.getTexture("key bg"));
 
@@ -28,9 +30,9 @@ void KeyBindingState::handleInput()
 		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left)
 		{
 			data_->settings.scrollSpeed--;
-			if (data_->settings.scrollSpeed < 1)
+			if (data_->settings.scrollSpeed < data_->settings.minumumScrollSpeed)
 			{
-				data_->settings.scrollSpeed = 1;
+				data_->settings.scrollSpeed = data_->settings.minumumScrollSpeed;
 			}
 		}
 		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right)
@@ -40,6 +42,13 @@ void KeyBindingState::handleInput()
 			{
 				data_->settings.scrollSpeed = 15;
 			}
+		}
+		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R)
+		{
+			data_->songsData.getSong(songName_).music.stop();
+			data_->transitionSound.play();
+			data_->songsData.unloadSongs();
+			data_->maschine.addState(std::make_unique<MainMenuState>(data_), true);
 		}
 	}
 }

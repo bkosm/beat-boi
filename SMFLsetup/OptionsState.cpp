@@ -6,6 +6,8 @@ OptionsState::OptionsState(std::shared_ptr<GameData> data, std::string songName)
 {
 	bg_.setTexture(data_->assets.getTexture("options bg"));
 
+	data_->settings.minumumScrollSpeed = unsigned(data_->songsData.getSong(songName_).bpm / 20);
+
 	play_.setSize(sf::Vector2f(400, 25));
 	play_.setFillColor(sf::Color::Transparent);
 	play_.setPosition(float(WIN_RES.x / 2 - play_.getGlobalBounds().width / 2), float(WIN_RES.y / 2 - 2 * play_.getGlobalBounds().height));
@@ -33,7 +35,7 @@ void OptionsState::handleInput()
 		}
 	}
 
-	if ((InputManager::isShapeClicked(play_, sf::Mouse::Left, data_->window) && !clicked_) || (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !clicked_))
+	if (InputManager::isShapeClicked(play_, sf::Mouse::Left, data_->window) && !clicked_ || sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !clicked_)
 	{
 		clicked_ = true;
 		data_->songsData.getSong(songName_).music.stop();
@@ -43,9 +45,9 @@ void OptionsState::handleInput()
 	if (InputManager::isShapeClicked(viewKeys_, sf::Mouse::Left, data_->window))
 	{
 		data_->transitionSound.play();
-		data_->maschine.addState(std::make_unique<KeyBindingState>(data_), false);
+		data_->maschine.addState(std::make_unique<KeyBindingState>(data_, songName_), false);
 	}
-	if ((InputManager::isShapeClicked(return_, sf::Mouse::Left, data_->window) && !clicked_) || (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && !clicked_))
+	if (InputManager::isShapeClicked(return_, sf::Mouse::Left, data_->window))
 	{
 		data_->songsData.getSong(songName_).music.stop();
 		data_->transitionSound.play();

@@ -3,6 +3,7 @@
 
 bool SongsData::loadSong(const std::string& songName)
 {
+	readOffset_();
 	if (!songContainer_[songName].loaded)
 	{
 		float readBpm{};
@@ -41,7 +42,7 @@ bool SongsData::loadSong(const std::string& songName)
 			return false;
 		}
 
-		readBpm *= tempoCorrection_;
+		readBpm *= offset_;
 
 		songContainer_[songName].music.openFromFile("./data/songs/" + songName + "/music.wav");
 		songContainer_[songName].hitSound.loadFromFile("./data/songs/" + songName + "/hitsound.wav");
@@ -52,25 +53,23 @@ bool SongsData::loadSong(const std::string& songName)
 	return true;
 }
 
-SongsData::SongsData()
+void SongsData::unloadSongs()
+{
+	songContainer_.clear();
+}
+
+void SongsData::readOffset_()
 {
 	std::ifstream input("./data/offset.bb");
 	if (input.is_open())
 	{
-		input >> tempoCorrection_;
-		std::cout << tempoCorrection_ << std::endl;
-		input.close();
+		input >> offset_;
 	}
 	else
 	{
-		input.close();
-		tempoCorrection_ = 1.01f;
+		offset_ = 1.01f;
 	}
-}
-
-void SongsData::unloadSongs()
-{
-	songContainer_.clear();
+	input.close();
 }
 
 Song& SongsData::getSong(const std::string & songName)
