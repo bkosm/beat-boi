@@ -20,12 +20,12 @@ public:
 	SongsData() = default;
 	~SongsData() = default;
 
-	void unloadSongs();
+	void unloadSong();
 	bool loadSong(const std::string& songName);
-	Song& getSong(const std::string& songName);
+	Song& getSong();
 
 private:
-	std::map<std::string, Song> songContainer_;
+	Song song_;
 	float offset_{};
 
 	void readOffset_();

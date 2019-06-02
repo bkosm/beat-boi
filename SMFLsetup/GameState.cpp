@@ -29,14 +29,14 @@ GameState::GameState(std::shared_ptr<GameData> data, std::string songName) :
 	particles_.three.setEmitter(sf::Vector2f(thirdHitter_.getPosition().x + thirdHitter_.getGlobalBounds().width / 2, thirdHitter_.getPosition().y + thirdHitter_.getGlobalBounds().height / 2));
 	particles_.four.setEmitter(sf::Vector2f(fourthHitter_.getPosition().x + fourthHitter_.getGlobalBounds().width / 2, fourthHitter_.getPosition().y + fourthHitter_.getGlobalBounds().height / 2));
 
-	hitSound_.setBuffer(data_->songsData.getSong(songName_).hitSound);
+	hitSound_.setBuffer(data_->songsData.getSong().hitSound);
 	hitSound_.setVolume(data_->settings.hitSoundVolume);
-	missSound_.setBuffer(data_->songsData.getSong(songName_).missSound);
+	missSound_.setBuffer(data_->songsData.getSong().missSound);
 	missSound_.setVolume(data_->settings.missSoundVolume);
 
-	musicDuration_ = data_->songsData.getSong(songName_).music.getDuration().asSeconds();
+	musicDuration_ = data_->songsData.getSong().music.getDuration().asSeconds();
 
-	data_->songsData.getSong(songName_).music.play();
+	data_->songsData.getSong().music.play();
 
 	gameClock_.restart();
 	songClock_.restart();
@@ -55,7 +55,7 @@ void GameState::handleInput()
 
 		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Key::Escape)
 		{
-			data_->songsData.getSong(songName_).music.stop();
+			data_->songsData.getSong().music.stop();
 			data_->maschine.removeState();
 			data_->maschine.addState(std::make_unique<PauseState>(data_, songName_, score_, maxCombo_), true);
 		}
@@ -67,7 +67,7 @@ void GameState::handleInput()
 			{
 				data_->currentMusicVolume = 0;
 			}
-			data_->songsData.getSong(songName_).music.setVolume(data_->currentMusicVolume);
+			data_->songsData.getSong().music.setVolume(data_->currentMusicVolume);
 
 		}
 		if (event.type == sf::Event::KeyPressed && event.key.code == data_->settings.volumeUp)
@@ -77,7 +77,7 @@ void GameState::handleInput()
 			{
 				data_->currentMusicVolume = 100;
 			}
-			data_->songsData.getSong(songName_).music.setVolume(data_->currentMusicVolume);
+			data_->songsData.getSong().music.setVolume(data_->currentMusicVolume);
 		}
 	}
 }
@@ -216,11 +216,11 @@ void GameState::updateScore_()
 
 void GameState::genDots_()
 {
-	for (unsigned i = 0; i < data_->songsData.getSong(songName_).chart.firstRow.size(); i++)
+	for (unsigned i = 0; i < data_->songsData.getSong().chart.firstRow.size(); i++)
 	{
 		std::vector<Hitmarker> temp;
 
-		if (data_->songsData.getSong(songName_).chart.firstRow[i] == true) {
+		if (data_->songsData.getSong().chart.firstRow[i] == true) {
 			Hitmarker dot1(data_->assets.getTexture("dot 1"));
 			dot1.sprite.setPosition(float(WIN_RES.x * 0.1188), -dot1.sprite.getGlobalBounds().height);
 			temp.emplace_back(dot1);
@@ -232,7 +232,7 @@ void GameState::genDots_()
 			temp.emplace_back(dot1);
 		}
 
-		if (data_->songsData.getSong(songName_).chart.secondRow[i] == true) {
+		if (data_->songsData.getSong().chart.secondRow[i] == true) {
 			Hitmarker dot2(data_->assets.getTexture("dot 2"));
 			dot2.sprite.setPosition(float(WIN_RES.x * 0.282), -dot2.sprite.getGlobalBounds().height);
 			temp.emplace_back(dot2);
@@ -244,7 +244,7 @@ void GameState::genDots_()
 			temp.emplace_back(dot2);
 		}
 
-		if (data_->songsData.getSong(songName_).chart.thirdRow[i] == true) {
+		if (data_->songsData.getSong().chart.thirdRow[i] == true) {
 			Hitmarker dot3(data_->assets.getTexture("dot 3"));
 			dot3.sprite.setPosition(float(WIN_RES.x * 0.445), -dot3.sprite.getGlobalBounds().height);
 			temp.emplace_back(dot3);
@@ -256,7 +256,7 @@ void GameState::genDots_()
 			temp.emplace_back(dot3);
 		}
 
-		if (data_->songsData.getSong(songName_).chart.fourthRow[i] == true) {
+		if (data_->songsData.getSong().chart.fourthRow[i] == true) {
 			Hitmarker dot4(data_->assets.getTexture("dot 4"));
 			dot4.sprite.setPosition(float(WIN_RES.x * 0.607), -dot4.sprite.getGlobalBounds().height);
 			temp.emplace_back(dot4);
@@ -287,7 +287,7 @@ void GameState::drawDots_()
 void GameState::updateDots_(const float dt)
 {
 	timeAccumulator_ += dt;
-	if (songClock_.getElapsedTime().asSeconds() + timeAccumulator_ > data_->songsData.getSong(songName_).beatDuration && !chart_.empty())
+	if (songClock_.getElapsedTime().asSeconds() + timeAccumulator_ > data_->songsData.getSong().beatDuration && !chart_.empty())
 	{
 		onScreen_.emplace_back(chart_[0]);
 		chart_.erase(chart_.begin());

@@ -6,7 +6,7 @@ OptionsState::OptionsState(std::shared_ptr<GameData> data, std::string songName)
 {
 	bg_.setTexture(data_->assets.getTexture("options bg"));
 
-	data_->settings.minumumScrollSpeed = unsigned(data_->songsData.getSong(songName_).bpm / 18 + 1);
+	data_->settings.minumumScrollSpeed = unsigned(data_->songsData.getSong().bpm / 18 + 1);
 	data_->settings.scrollSpeed = data_->settings.minumumScrollSpeed;
 
 	play_.setSize(sf::Vector2f(400, 25));
@@ -21,8 +21,8 @@ OptionsState::OptionsState(std::shared_ptr<GameData> data, std::string songName)
 	return_.setFillColor(sf::Color::Transparent);
 	return_.setPosition(float(WIN_RES.x / 2 - return_.getGlobalBounds().width / 2), float(WIN_RES.y / 2 + 2 * return_.getGlobalBounds().height));
 
-	data_->songsData.getSong(songName_).music.setVolume(data_->currentMusicVolume);
-	data_->songsData.getSong(songName_).music.play();
+	data_->songsData.getSong().music.setVolume(data_->currentMusicVolume);
+	data_->songsData.getSong().music.play();
 }
 
 void OptionsState::handleInput()
@@ -43,7 +43,7 @@ void OptionsState::handleInput()
 			{
 				data_->currentMusicVolume = 0;
 			}
-			data_->songsData.getSong(songName_).music.setVolume(data_->currentMusicVolume);
+			data_->songsData.getSong().music.setVolume(data_->currentMusicVolume);
 
 		}
 		if (event.type == sf::Event::KeyPressed && event.key.code == data_->settings.volumeUp)
@@ -53,14 +53,14 @@ void OptionsState::handleInput()
 			{
 				data_->currentMusicVolume = 100;
 			}
-			data_->songsData.getSong(songName_).music.setVolume(data_->currentMusicVolume);
+			data_->songsData.getSong().music.setVolume(data_->currentMusicVolume);
 		}
 	}
 
 	if (InputManager::isShapeClicked(play_, sf::Mouse::Left, data_->window) && !clicked_ || sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !clicked_)
 	{
 		clicked_ = true;
-		data_->songsData.getSong(songName_).music.stop();
+		data_->songsData.getSong().music.stop();
 		data_->transitionSound.play();
 		data_->maschine.removeState();
 		data_->maschine.addState(std::make_unique<GameState>(data_, songName_), true);
@@ -72,7 +72,7 @@ void OptionsState::handleInput()
 	}
 	if (InputManager::isShapeClicked(return_, sf::Mouse::Left, data_->window))
 	{
-		data_->songsData.getSong(songName_).music.stop();
+		data_->songsData.getSong().music.stop();
 		data_->transitionSound.play();
 		data_->maschine.removeState();
 		data_->maschine.addState(std::make_unique<MainMenuState>(data_), true);

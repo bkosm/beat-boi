@@ -2,6 +2,8 @@
 
 MainMenuState::MainMenuState(std::shared_ptr<GameData> data) : data_(std::move(data))
 {
+	data_->songsData.unloadSong();
+
 	bg_.setTexture(data_->assets.getTexture("menu bg"));
 
 	enteredText_.setFont(data_->assets.getFont("MAIN"));
