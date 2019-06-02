@@ -9,6 +9,8 @@ MainMenuState::MainMenuState(std::shared_ptr<GameData> data) : data_(std::move(d
 	enteredText_.setFillColor(sf::Color::Black);
 	enteredText_.setPosition(float(WIN_RES.x * 0.5), float(WIN_RES.y * 0.7));
 
+	data_->backgroundMusic.setVolume(data_->currentMusicVolume);
+
 	if (data_->backgroundMusic.getStatus() == sf::Music::Stopped)
 	{
 		data_->backgroundMusic.play();
@@ -32,6 +34,25 @@ void MainMenuState::handleInput()
 		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Delete)
 		{
 			stringEntered_ = "";
+		}
+		if (event.type == sf::Event::KeyPressed && event.key.code == data_->settings.volumeDown)
+		{
+			data_->currentMusicVolume -= 10.0f;
+			if (data_->currentMusicVolume < 0)
+			{
+				data_->currentMusicVolume = 0;
+			}
+			data_->backgroundMusic.setVolume(data_->currentMusicVolume);
+
+		}
+		if (event.type == sf::Event::KeyPressed && event.key.code == data_->settings.volumeUp)
+		{
+			data_->currentMusicVolume += 10.0f;
+			if (data_->currentMusicVolume > 100)
+			{
+				data_->currentMusicVolume = 100;
+			}
+			data_->backgroundMusic.setVolume(data_->currentMusicVolume);
 		}
 	}
 }

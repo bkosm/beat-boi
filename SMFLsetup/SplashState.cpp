@@ -30,7 +30,7 @@ SplashState::SplashState(std::shared_ptr<GameData> data) : data_(std::move(data)
 	data_->transitionSound.setBuffer(data_->assets.getSound("TRANSITION"));
 	data_->applauseSound.setBuffer(data_->assets.getSound("APPLAUSE"));
 	data_->transitionSound.setVolume(50.f);
-	data_->applauseSound.setVolume(50.f);
+	data_->applauseSound.setVolume(35.f);
 
 	bg_.setTexture(data_->assets.getTexture("splash bg"));
 	data_->window.draw(bg_);
@@ -55,6 +55,26 @@ void SplashState::handleInput()
 		{
 			data_->transitionSound.play();
 			data_->maschine.addState(std::make_unique<MainMenuState>(data_), true);
+		}
+
+		if (event.type == sf::Event::KeyPressed && event.key.code == data_->settings.volumeDown)
+		{
+			data_->currentMusicVolume -= 10.0f;
+			if (data_->currentMusicVolume < 0)
+			{
+				data_->currentMusicVolume = 0;
+			}
+			data_->backgroundMusic.setVolume(data_->currentMusicVolume);
+
+		}
+		if (event.type == sf::Event::KeyPressed && event.key.code == data_->settings.volumeUp)
+		{
+			data_->currentMusicVolume += 10.0f;
+			if (data_->currentMusicVolume > 100)
+			{
+				data_->currentMusicVolume = 100;
+			}
+			data_->backgroundMusic.setVolume(data_->currentMusicVolume);
 		}
 	}
 }

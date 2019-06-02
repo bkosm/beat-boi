@@ -19,6 +19,8 @@ void Settings::resetSettings()
 	volumeUp = sf::Keyboard::Key::Equal;
 	volumeDown = sf::Keyboard::Key::Hyphen;
 	scrollSpeed = 5;
+	hitSoundVolume = 8.f;
+	missSoundVolume = 7.f;
 }
 
 Hitmarker::Hitmarker(const sf::Texture& texture, const bool hit)

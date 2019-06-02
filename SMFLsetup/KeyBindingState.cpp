@@ -10,6 +10,8 @@ KeyBindingState::KeyBindingState(std::shared_ptr<GameData> data, std::string son
 	speedText_.setCharacterSize(35);
 	speedText_.setFillColor(sf::Color::Black);
 	speedText_.setPosition(float(WIN_RES.x * 0.65), float(WIN_RES.y * 0.8));
+
+	data_->songsData.getSong(songName_).music.setVolume(data_->currentMusicVolume);
 }
 
 void KeyBindingState::handleInput()
@@ -49,6 +51,25 @@ void KeyBindingState::handleInput()
 			data_->transitionSound.play();
 			data_->songsData.unloadSongs();
 			data_->maschine.addState(std::make_unique<MainMenuState>(data_), true);
+		}
+		if (event.type == sf::Event::KeyPressed && event.key.code == data_->settings.volumeDown)
+		{
+			data_->currentMusicVolume -= 10.0f;
+			if (data_->currentMusicVolume < 0)
+			{
+				data_->currentMusicVolume = 0;
+			}
+			data_->songsData.getSong(songName_).music.setVolume(data_->currentMusicVolume);
+
+		}
+		if (event.type == sf::Event::KeyPressed && event.key.code == data_->settings.volumeUp)
+		{
+			data_->currentMusicVolume += 10.0f;
+			if (data_->currentMusicVolume > 100)
+			{
+				data_->currentMusicVolume = 100;
+			}
+			data_->songsData.getSong(songName_).music.setVolume(data_->currentMusicVolume);
 		}
 	}
 }

@@ -72,6 +72,7 @@ void EndGameState::handleInput()
 	{
 		clicked_ = true;
 		data_->transitionSound.play();
+		data_->songsData.unloadSongs();
 		data_->maschine.addState(std::make_unique<MainMenuState>(data_), true);
 	}
 }
@@ -113,8 +114,16 @@ void EndGameState::processBestScore_()
 			{
 				if (std::stoi(match.str(1)) > score_) //Old highscore
 				{
-					bestScore_ = match.str(1);
-					bestCombo_ = match.str(2);
+					if (std::stoi(match.str(2)) > 10000)
+					{
+						bestScore_ = "Yeah";
+						bestCombo_ = "OFC";
+					}
+					else
+					{
+						bestScore_ = match.str(1);
+						bestCombo_ = match.str(2);
+					}
 				}
 				else //Overwrite highscore
 				{

@@ -30,7 +30,9 @@ GameState::GameState(std::shared_ptr<GameData> data, std::string songName) :
 	particles_.four.setEmitter(sf::Vector2f(fourthHitter_.getPosition().x + fourthHitter_.getGlobalBounds().width / 2, fourthHitter_.getPosition().y + fourthHitter_.getGlobalBounds().height / 2));
 
 	hitSound_.setBuffer(data_->songsData.getSong(songName_).hitSound);
-	hitSound_.setVolume(8);
+	hitSound_.setVolume(data_->settings.hitSoundVolume);
+	missSound_.setBuffer(data_->songsData.getSong(songName_).missSound);
+	missSound_.setVolume(data_->settings.missSoundVolume);
 
 	musicDuration_ = data_->songsData.getSong(songName_).music.getDuration().asSeconds();
 
@@ -59,22 +61,22 @@ void GameState::handleInput()
 
 		if (event.type == sf::Event::KeyPressed && event.key.code == data_->settings.volumeDown)
 		{
-			currentVolume_ -= 10.0f;
-			if (currentVolume_ < 0)
+			data_->currentMusicVolume -= 10.0f;
+			if (data_->currentMusicVolume < 0)
 			{
-				currentVolume_ = 0;
+				data_->currentMusicVolume = 0;
 			}
-			data_->songsData.getSong(songName_).music.setVolume(currentVolume_);
+			data_->songsData.getSong(songName_).music.setVolume(data_->currentMusicVolume);
 
 		}
 		if (event.type == sf::Event::KeyPressed && event.key.code == data_->settings.volumeUp)
 		{
-			currentVolume_ += 10.0f;
-			if (currentVolume_ > 100)
+			data_->currentMusicVolume += 10.0f;
+			if (data_->currentMusicVolume > 100)
 			{
-				currentVolume_ = 100;
+				data_->currentMusicVolume = 100;
 			}
-			data_->songsData.getSong(songName_).music.setVolume(currentVolume_);
+			data_->songsData.getSong(songName_).music.setVolume(data_->currentMusicVolume);
 		}
 	}
 }
@@ -83,6 +85,7 @@ void GameState::update(const float dt)
 {
 	if (gameClock_.getElapsedTime().asSeconds() > musicDuration_)
 	{
+		score_ += maxCombo_ * data_->settings.scrollSpeed;
 		data_->maschine.addState(std::make_unique<EndGameState>(data_, songName_, score_, maxCombo_), true);
 	}
 
@@ -116,6 +119,11 @@ void GameState::updateScore_()
 	{
 		for (auto& dots : onScreen_)
 		{
+			if (dots[0].isHit && dots[1].isHit && dots[2].isHit && dots[3].isHit)
+			{
+				continue;
+			}
+
 			bool failed = false;
 			int currentScore = 0;
 			if (InputManager::scoreCollision(dots[0].sprite, firstHitter_) && !dots[0].isHit && !dots[0].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit1))
@@ -173,13 +181,21 @@ void GameState::updateScore_()
 
 			if (failed)
 			{
+
 				particles_.dontDraw();
 				combo_ = 0;
+				if (playMiss_)
+				{
+					missSound_.play();
+				}
+				playMiss_ = false;
 			}
 			else if (currentScore > 0 && particles_.isBeatValid())
 			{
 				hitSound_.play();
+				playMiss_ = true;
 				score_ += currentScore;
+				break;
 			}
 		}
 	}
@@ -290,6 +306,11 @@ void GameState::updateDots_(const float dt)
 					{
 						combo_ = 0;
 						particles_.dontDraw();
+						if (playMiss_)
+						{
+							missSound_.play();
+						}
+						playMiss_ = false;
 						break;
 					}
 				}

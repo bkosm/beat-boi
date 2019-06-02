@@ -16,12 +16,13 @@ private:
 	EffectParticles particles_;
 	sf::Sprite firstHitter_, secondHitter_, fourthHitter_, thirdHitter_, bg_;
 	sf::Text scoreText_, comboText_;
-	sf::Sound hitSound_;
+	sf::Sound hitSound_, missSound_;
 	sf::Clock songClock_, gameClock_;
 
 	std::string songName_;
 	int score_{ 0 }, combo_{ 0 }, maxCombo_{ 0 };
-	float musicDuration_{}, currentVolume_{ 100.f }, timeAccumulator_{ 0.0f };
+	float musicDuration_{}, timeAccumulator_{ 0.0f };
+	bool playMiss_{ true };
 
 	void animateHitmarkers_();
 	void updateScore_();

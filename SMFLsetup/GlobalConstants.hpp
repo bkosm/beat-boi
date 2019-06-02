@@ -3,7 +3,6 @@
 const sf::Vector2u WIN_RES{ 720,480 };
 
 const float FRAMERATE = 1.f / 60.f;
-const float TEMPO_CORRECTION = 1.025f;
 const unsigned NMBR_OF_PARTICLES = 300;
 
 const std::string SPLASH_MUSIC_PATH = "./resources/audio/SPLASH_MUSIC.wav";

@@ -9,7 +9,7 @@ struct Song
 {
 	SongChart chart;
 	sf::Music music;
-	sf::SoundBuffer hitSound;
+	sf::SoundBuffer hitSound, missSound;
 	float bpm{}, beatDuration{};
 	bool loaded = false;
 };

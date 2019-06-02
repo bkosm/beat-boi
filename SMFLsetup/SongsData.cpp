@@ -1,5 +1,4 @@
 #include "pch.h"
-#include <iostream>
 
 bool SongsData::loadSong(const std::string& songName)
 {
@@ -46,6 +45,7 @@ bool SongsData::loadSong(const std::string& songName)
 
 		songContainer_[songName].music.openFromFile("./data/songs/" + songName + "/music.wav");
 		songContainer_[songName].hitSound.loadFromFile("./data/songs/" + songName + "/hitsound.wav");
+		songContainer_[songName].missSound.loadFromFile("./data/songs/" + songName + "/misssound.wav");
 		songContainer_[songName].bpm = readBpm;
 		songContainer_[songName].beatDuration = 60.0f / readBpm;
 		songContainer_[songName].loaded = true;
@@ -67,7 +67,7 @@ void SongsData::readOffset_()
 	}
 	else
 	{
-		offset_ = 1.01f;
+		offset_ = 1.001f;
 	}
 	input.close();
 }
