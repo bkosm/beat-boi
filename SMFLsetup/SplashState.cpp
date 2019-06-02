@@ -54,6 +54,7 @@ void SplashState::handleInput()
 		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space)
 		{
 			data_->transitionSound.play();
+			data_->maschine.removeState();
 			data_->maschine.addState(std::make_unique<MainMenuState>(data_), true);
 		}
 

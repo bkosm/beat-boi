@@ -66,13 +66,14 @@ void EndGameState::handleInput()
 	{
 		clicked_ = true;
 		data_->transitionSound.play();
+		data_->maschine.removeState();
 		data_->maschine.addState(std::make_unique<OptionsState>(data_, songName_), true);
 	}
 	if (InputManager::isShapeClicked(exit_, sf::Mouse::Left, data_->window) && !clicked_ || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && !clicked_)
 	{
 		clicked_ = true;
 		data_->transitionSound.play();
-		data_->songsData.unloadSongs();
+		data_->maschine.removeState();
 		data_->maschine.addState(std::make_unique<MainMenuState>(data_), true);
 	}
 }

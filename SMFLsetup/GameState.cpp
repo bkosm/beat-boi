@@ -56,6 +56,7 @@ void GameState::handleInput()
 		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Key::Escape)
 		{
 			data_->songsData.getSong(songName_).music.stop();
+			data_->maschine.removeState();
 			data_->maschine.addState(std::make_unique<PauseState>(data_, songName_, score_, maxCombo_), true);
 		}
 
@@ -86,6 +87,7 @@ void GameState::update(const float dt)
 	if (gameClock_.getElapsedTime().asSeconds() > musicDuration_)
 	{
 		score_ += maxCombo_ * data_->settings.scrollSpeed;
+		data_->maschine.removeState();
 		data_->maschine.addState(std::make_unique<EndGameState>(data_, songName_, score_, maxCombo_), true);
 	}
 

@@ -67,6 +67,7 @@ void MainMenuState::update(const float dt)
 		played_ = true;
 		data_->backgroundMusic.stop();
 		data_->transitionSound.play();
+		data_->maschine.removeState();
 		data_->maschine.addState(std::make_unique<OptionsState>(data_, stringEntered_), true);
 	}
 	if (stringEntered_ == "exit")

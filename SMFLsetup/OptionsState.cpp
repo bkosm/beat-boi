@@ -62,6 +62,7 @@ void OptionsState::handleInput()
 		clicked_ = true;
 		data_->songsData.getSong(songName_).music.stop();
 		data_->transitionSound.play();
+		data_->maschine.removeState();
 		data_->maschine.addState(std::make_unique<GameState>(data_, songName_), true);
 	}
 	if (InputManager::isShapeClicked(viewKeys_, sf::Mouse::Left, data_->window))
@@ -73,6 +74,7 @@ void OptionsState::handleInput()
 	{
 		data_->songsData.getSong(songName_).music.stop();
 		data_->transitionSound.play();
+		data_->maschine.removeState();
 		data_->maschine.addState(std::make_unique<MainMenuState>(data_), true);
 	}
 }

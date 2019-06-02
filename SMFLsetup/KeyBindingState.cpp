@@ -9,7 +9,7 @@ KeyBindingState::KeyBindingState(std::shared_ptr<GameData> data, std::string son
 	speedText_.setFont(data_->assets.getFont("MAIN"));
 	speedText_.setCharacterSize(35);
 	speedText_.setFillColor(sf::Color::Black);
-	speedText_.setPosition(float(WIN_RES.x * 0.65), float(WIN_RES.y * 0.8));
+	speedText_.setPosition(float(WIN_RES.x * 0.562), float(WIN_RES.y * 0.82));
 
 	data_->songsData.getSong(songName_).music.setVolume(data_->currentMusicVolume);
 }
