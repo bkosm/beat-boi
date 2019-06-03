@@ -1,5 +1,11 @@
 # BeatBoiGame
-Little rythm minigame made for a school project.
+<p align="center">
+  <b>Little rythm minigame made for a school project.</b>
+</p>
+
+<p align="center">
+<img src="https://github.com/bart-kosmala/BeatBoiGame/blob/master/SMFLsetup/resources/pictures/splashscreen.png">
+</p>
 
 All music uploaded by me as demo is my own property, and it is therefore free to use.
 I do not support mapping music that belongs to other people without their approval.
