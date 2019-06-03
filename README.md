@@ -11,7 +11,10 @@ All music uploaded by me as demo is my own property, and it is therefore free to
 I do not support mapping music that belongs to other people without their approval.
 Share your maps only when you are sure no rights are being broken.
 
-[**v1.0 DOWNLOAD**](https://www.mediafire.com/file/zxkpqg76eipmac6/BeatBoi_v1.0.rar/file)
+<p align="center">
+<a href="https://www.mediafire.com/file/zxkpqg76eipmac6/BeatBoi_v1.0.rar/file"><b>v1.0 DOWNLOAD</b></a>
+</p>
+
 
 To create your own maps simply create a folder in the "./data/songs/" directory and then paste there:
 * Your song in ".wav" format as "music.wav".
