@@ -27,7 +27,7 @@ For reference look up to provided examples.
 If you're experiencing some kind of tempo offset try to modify the value stored in **"./data/offset.bb"**. 
 Open the file in notepad and experiment with the value to minimize the lag.
 
-_The release also contains a python script for generating random maps. Enter the information you're asked for concerning the song and it will generate a "data.bin" file with a random chart ready to play._
+_The release also contains a python script for generating random maps. Enter the information you're asked for concerning the song and it will generate a <b>"data.bin"</b> file with a random chart ready to play._
 
 **Have fun!**
 
