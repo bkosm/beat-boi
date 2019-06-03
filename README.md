@@ -1,6 +1,6 @@
 # BeatBoiGame
 <p align="center">
-  <b>Little rythm minigame made for a school project.</b>
+  <b>Little rythm minigame made for a semester project.</b>
 </p>
 
 <p align="center">
