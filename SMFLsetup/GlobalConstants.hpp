@@ -3,7 +3,7 @@
 const sf::Vector2u WIN_RES{ 720,480 };
 
 const float FRAMERATE = 1.f / 60.f;
-const unsigned NMBR_OF_PARTICLES = 300;
+const unsigned NMBR_OF_PARTICLES = 450;
 
 const std::string SPLASH_MUSIC_PATH = "./resources/audio/SPLASH_MUSIC.wav";
 const std::string TRANSITION_SOUND_PATH = "./resources/audio/TRANSITION_SOUND.wav";
@@ -30,3 +30,4 @@ const std::string DOT3_PATH = "./resources/pictures/dot3.png";
 const std::string DOT4_PATH = "./resources/pictures/dot4.png";
 const std::string DOT_HIT_PATH = "./resources/pictures/dotHit.png";
 const std::string EMPTY_TEX_PATH = "./resources/pictures/emptyTexture.png";
+const std::string ICON_PATH = "./resources/pictures/bbIcon.ico";

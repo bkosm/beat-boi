@@ -84,11 +84,19 @@ void EffectParticles::dontDraw()
 void EffectParticles::draw(sf::RenderWindow & window) const
 {
 	if (drawOne)
+	{
 		window.draw(one);
+	}
 	if (drawTwo)
+	{
 		window.draw(two);
+	}
 	if (drawThree)
+	{
 		window.draw(three);
+	}
 	if (drawFour)
+	{
 		window.draw(four);
+	}
 }

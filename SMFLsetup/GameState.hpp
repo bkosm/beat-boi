@@ -12,19 +12,19 @@ public:
 private:
 	std::shared_ptr<GameData> data_;
 
-	std::vector<std::vector<Hitmarker>> chart_{}, onScreen_{};
 	EffectParticles particles_;
+	GameSounds sounds_;
+	std::vector<std::vector<Hitmarker>> chart_{}, onScreen_{};
+
 	sf::Sprite firstHitter_, secondHitter_, fourthHitter_, thirdHitter_, bg_;
 	sf::Text scoreText_, comboText_;
-	sf::Sound hitSound_, missSound_;
 	sf::Clock songClock_, gameClock_;
 
 	std::string songName_;
 	int score_{ 0 }, combo_{ 0 }, maxCombo_{ 0 };
 	float musicDuration_{}, timeAccumulator_{ 0.0f };
-	bool playMiss_{ true };
 
-	void animateHitmarkers_();
+	void animateHitters_();
 	void updateScore_();
 	void genDots_();
 	void drawDots_();

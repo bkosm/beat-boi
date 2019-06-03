@@ -9,9 +9,9 @@ MainMenuState::MainMenuState(std::shared_ptr<GameData> data) : data_(std::move(d
 	enteredText_.setFont(data_->assets.getFont("MAIN"));
 	enteredText_.setCharacterSize(45);
 	enteredText_.setFillColor(sf::Color::Black);
-	enteredText_.setPosition(float(WIN_RES.x * 0.5), float(WIN_RES.y * 0.7));
+	enteredText_.setPosition(float(data_->window.getSize().x * 0.5), float(data_->window.getSize().y * 0.7));
 
-	data_->backgroundMusic.setVolume(data_->currentMusicVolume);
+	data_->backgroundMusic.setVolume(data_->settings.currentMusicVolume);
 
 	if (data_->backgroundMusic.getStatus() == sf::Music::Stopped)
 	{
@@ -39,22 +39,22 @@ void MainMenuState::handleInput()
 		}
 		if (event.type == sf::Event::KeyPressed && event.key.code == data_->settings.volumeDown)
 		{
-			data_->currentMusicVolume -= 10.0f;
-			if (data_->currentMusicVolume < 0)
+			data_->settings.currentMusicVolume -= 10.0f;
+			if (data_->settings.currentMusicVolume < 0)
 			{
-				data_->currentMusicVolume = 0;
+				data_->settings.currentMusicVolume = 0;
 			}
-			data_->backgroundMusic.setVolume(data_->currentMusicVolume);
+			data_->backgroundMusic.setVolume(data_->settings.currentMusicVolume);
 
 		}
 		if (event.type == sf::Event::KeyPressed && event.key.code == data_->settings.volumeUp)
 		{
-			data_->currentMusicVolume += 10.0f;
-			if (data_->currentMusicVolume > 100)
+			data_->settings.currentMusicVolume += 10.0f;
+			if (data_->settings.currentMusicVolume > 100)
 			{
-				data_->currentMusicVolume = 100;
+				data_->settings.currentMusicVolume = 100;
 			}
-			data_->backgroundMusic.setVolume(data_->currentMusicVolume);
+			data_->backgroundMusic.setVolume(data_->settings.currentMusicVolume);
 		}
 	}
 }

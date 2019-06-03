@@ -10,11 +10,11 @@ PauseState::PauseState(std::shared_ptr<GameData> data, std::string songName, con
 
 	restart_.setSize(sf::Vector2f(500, 45));
 	restart_.setFillColor(sf::Color::Transparent);
-	restart_.setPosition(float(WIN_RES.x / 2 - restart_.getGlobalBounds().width / 2), float(WIN_RES.y / 2 - restart_.getGlobalBounds().height));
+	restart_.setPosition(float(data_->window.getSize().x / 2 - restart_.getGlobalBounds().width / 2), float(data_->window.getSize().y / 2 - restart_.getGlobalBounds().height));
 
 	exit_.setSize(sf::Vector2f(500, 45));
 	exit_.setFillColor(sf::Color::Transparent);
-	exit_.setPosition(float(WIN_RES.x / 2 - exit_.getGlobalBounds().width / 2), float(WIN_RES.y / 2 + exit_.getGlobalBounds().height));
+	exit_.setPosition(float(data_->window.getSize().x / 2 - exit_.getGlobalBounds().width / 2), float(data_->window.getSize().y / 2 + exit_.getGlobalBounds().height));
 }
 
 void PauseState::handleInput()
@@ -28,7 +28,6 @@ void PauseState::handleInput()
 			data_->window.close();
 		}
 	}
-
 	if (InputManager::isShapeClicked(restart_, sf::Mouse::Left, data_->window))
 	{
 		data_->transitionSound.play();

@@ -9,9 +9,9 @@ KeyBindingState::KeyBindingState(std::shared_ptr<GameData> data, std::string son
 	speedText_.setFont(data_->assets.getFont("MAIN"));
 	speedText_.setCharacterSize(35);
 	speedText_.setFillColor(sf::Color::Black);
-	speedText_.setPosition(float(WIN_RES.x * 0.562), float(WIN_RES.y * 0.82));
+	speedText_.setPosition(float(data_->window.getSize().x * 0.562), float(data_->window.getSize().y * 0.82));
 
-	data_->songsData.getSong().music.setVolume(data_->currentMusicVolume);
+	data_->songsData.getMusic().setVolume(data_->settings.currentMusicVolume);
 }
 
 void KeyBindingState::handleInput()
@@ -47,29 +47,29 @@ void KeyBindingState::handleInput()
 		}
 		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R)
 		{
-			data_->songsData.getSong().music.stop();
+			data_->songsData.getMusic().stop();
 			data_->transitionSound.play();
 			data_->songsData.unloadSong();
 			data_->maschine.addState(std::make_unique<MainMenuState>(data_), true);
 		}
 		if (event.type == sf::Event::KeyPressed && event.key.code == data_->settings.volumeDown)
 		{
-			data_->currentMusicVolume -= 10.0f;
-			if (data_->currentMusicVolume < 0)
+			data_->settings.currentMusicVolume -= 10.0f;
+			if (data_->settings.currentMusicVolume < 0)
 			{
-				data_->currentMusicVolume = 0;
+				data_->settings.currentMusicVolume = 0;
 			}
-			data_->songsData.getSong().music.setVolume(data_->currentMusicVolume);
+			data_->songsData.getMusic().setVolume(data_->settings.currentMusicVolume);
 
 		}
 		if (event.type == sf::Event::KeyPressed && event.key.code == data_->settings.volumeUp)
 		{
-			data_->currentMusicVolume += 10.0f;
-			if (data_->currentMusicVolume > 100)
+			data_->settings.currentMusicVolume += 10.0f;
+			if (data_->settings.currentMusicVolume > 100)
 			{
-				data_->currentMusicVolume = 100;
+				data_->settings.currentMusicVolume = 100;
 			}
-			data_->songsData.getSong().music.setVolume(data_->currentMusicVolume);
+			data_->songsData.getMusic().setVolume(data_->settings.currentMusicVolume);
 		}
 	}
 }

@@ -21,15 +21,6 @@ void Settings::resetSettings()
 	scrollSpeed = 5;
 	hitSoundVolume = 8.f;
 	missSoundVolume = 7.f;
-}
-
-Hitmarker::Hitmarker(const sf::Texture& texture, const bool hit)
-{
-	sprite.setTexture(texture);
-	isHit = hit;
-}
-
-bool Hitmarker::hasEmptyTex() const
-{
-	return sprite.getTexture()->getSize().x == 1;
+	transitionVolume = 50.0f;
+	applauseVolume = 35.0f;
 }

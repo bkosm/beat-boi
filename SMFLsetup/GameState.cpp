@@ -2,25 +2,26 @@
 
 GameState::GameState(std::shared_ptr<GameData> data, std::string songName) :
 	data_(std::move(data)),
+	sounds_(data_->songsData.getHitSound(), data_->settings.hitSoundVolume, data_->songsData.getMissSound(), data_->settings.missSoundVolume),
 	songName_(std::move(songName))
 {
 	genDots_();
 
 	bg_.setTexture(data_->assets.getTexture("game bg"));
 
-	firstHitter_.setPosition(float(WIN_RES.x * 0.1188), float(WIN_RES.y * 0.7));
-	secondHitter_.setPosition(float(WIN_RES.x * 0.282), float(WIN_RES.y * 0.7));
-	thirdHitter_.setPosition(float(WIN_RES.x * 0.445), float(WIN_RES.y * 0.7));
-	fourthHitter_.setPosition(float(WIN_RES.x * 0.607), float(WIN_RES.y * 0.7));
+	firstHitter_.setPosition(float(data_->window.getSize().x * 0.1188), float(data_->window.getSize().y * 0.7));
+	secondHitter_.setPosition(float(data_->window.getSize().x * 0.282), float(data_->window.getSize().y * 0.7));
+	thirdHitter_.setPosition(float(data_->window.getSize().x * 0.445), float(data_->window.getSize().y * 0.7));
+	fourthHitter_.setPosition(float(data_->window.getSize().x * 0.607), float(data_->window.getSize().y * 0.7));
 
 	scoreText_.setFont(data_->assets.getFont("MAIN"));
 	scoreText_.setOrigin(scoreText_.getGlobalBounds().width, scoreText_.getGlobalBounds().height);
-	scoreText_.setPosition(float(WIN_RES.x * 0.995), float(WIN_RES.y * 0.028));
+	scoreText_.setPosition(float(data_->window.getSize().x * 0.995), float(data_->window.getSize().y * 0.028));
 	scoreText_.setFillColor(sf::Color::White);
 	scoreText_.setCharacterSize(15);
 
 	comboText_.setFont(data_->assets.getFont("MAIN"));
-	comboText_.setPosition(float(WIN_RES.x * 0.995), float(WIN_RES.y * 0.07));
+	comboText_.setPosition(float(data_->window.getSize().x * 0.995), float(data_->window.getSize().y * 0.07));
 	comboText_.setFillColor(sf::Color::White);
 	comboText_.setCharacterSize(15);
 
@@ -29,14 +30,9 @@ GameState::GameState(std::shared_ptr<GameData> data, std::string songName) :
 	particles_.three.setEmitter(sf::Vector2f(thirdHitter_.getPosition().x + thirdHitter_.getGlobalBounds().width / 2, thirdHitter_.getPosition().y + thirdHitter_.getGlobalBounds().height / 2));
 	particles_.four.setEmitter(sf::Vector2f(fourthHitter_.getPosition().x + fourthHitter_.getGlobalBounds().width / 2, fourthHitter_.getPosition().y + fourthHitter_.getGlobalBounds().height / 2));
 
-	hitSound_.setBuffer(data_->songsData.getSong().hitSound);
-	hitSound_.setVolume(data_->settings.hitSoundVolume);
-	missSound_.setBuffer(data_->songsData.getSong().missSound);
-	missSound_.setVolume(data_->settings.missSoundVolume);
+	musicDuration_ = data_->songsData.getMusic().getDuration().asSeconds();
 
-	musicDuration_ = data_->songsData.getSong().music.getDuration().asSeconds();
-
-	data_->songsData.getSong().music.play();
+	data_->songsData.getMusic().play();
 
 	gameClock_.restart();
 	songClock_.restart();
@@ -55,29 +51,29 @@ void GameState::handleInput()
 
 		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Key::Escape)
 		{
-			data_->songsData.getSong().music.stop();
+			data_->songsData.getMusic().stop();
 			data_->maschine.removeState();
 			data_->maschine.addState(std::make_unique<PauseState>(data_, songName_, score_, maxCombo_), true);
 		}
 
 		if (event.type == sf::Event::KeyPressed && event.key.code == data_->settings.volumeDown)
 		{
-			data_->currentMusicVolume -= 10.0f;
-			if (data_->currentMusicVolume < 0)
+			data_->settings.currentMusicVolume -= 10.0f;
+			if (data_->settings.currentMusicVolume < 0)
 			{
-				data_->currentMusicVolume = 0;
+				data_->settings.currentMusicVolume = 0;
 			}
-			data_->songsData.getSong().music.setVolume(data_->currentMusicVolume);
+			data_->songsData.getMusic().setVolume(data_->settings.currentMusicVolume);
 
 		}
 		if (event.type == sf::Event::KeyPressed && event.key.code == data_->settings.volumeUp)
 		{
-			data_->currentMusicVolume += 10.0f;
-			if (data_->currentMusicVolume > 100)
+			data_->settings.currentMusicVolume += 10.0f;
+			if (data_->settings.currentMusicVolume > 100)
 			{
-				data_->currentMusicVolume = 100;
+				data_->settings.currentMusicVolume = 100;
 			}
-			data_->songsData.getSong().music.setVolume(data_->currentMusicVolume);
+			data_->songsData.getMusic().setVolume(data_->settings.currentMusicVolume);
 		}
 	}
 }
@@ -91,7 +87,7 @@ void GameState::update(const float dt)
 		data_->maschine.addState(std::make_unique<EndGameState>(data_, songName_, score_, maxCombo_), true);
 	}
 
-	animateHitmarkers_();
+	animateHitters_();
 	updateDots_(dt);
 	updateScore_();
 
@@ -121,61 +117,61 @@ void GameState::updateScore_()
 	{
 		for (auto& dots : onScreen_)
 		{
-			if (dots[0].isHit && dots[1].isHit && dots[2].isHit && dots[3].isHit)
+			if (dots[0].isHit() && dots[1].isHit() && dots[2].isHit() && dots[3].isHit())
 			{
 				continue;
 			}
 
 			bool failed = false;
 			int currentScore = 0;
-			if (InputManager::scoreCollision(dots[0].sprite, firstHitter_) && !dots[0].isHit && !dots[0].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit1))
+
+			if (InputManager::scoreCollision(dots[0].getSprite(), firstHitter_) && !dots[0].isHit() && !dots[0].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit1))
 			{
 				combo_++;
 				currentScore += 5 + combo_;
 				particles_.drawOne = true;
-				dots[0].isHit = true;
-				dots[0].sprite.setTexture(data_->assets.getTexture("dot hit"));
+				dots[0].setHit(data_->assets.getTexture("dot hit"));
 			}
-			else if (InputManager::scoreCollision(dots[0].sprite, firstHitter_) && dots[0].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit1))
+			else if (InputManager::scoreCollision(dots[0].getSprite(), firstHitter_) && dots[0].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit1))
 			{
 				failed = true;
 				particles_.drawOne = false;
 			}
-			if (InputManager::scoreCollision(dots[1].sprite, secondHitter_) && !dots[1].isHit && !dots[1].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit2))
+
+			if (InputManager::scoreCollision(dots[1].getSprite(), secondHitter_) && !dots[1].isHit() && !dots[1].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit2))
 			{
 				combo_++;
 				currentScore += 5 + combo_;
 				particles_.drawTwo = true;
-				dots[1].isHit = true;
-				dots[1].sprite.setTexture(data_->assets.getTexture("dot hit"));
+				dots[1].setHit(data_->assets.getTexture("dot hit"));
 			}
-			else if (InputManager::scoreCollision(dots[1].sprite, secondHitter_) && dots[1].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit2))
+			else if (InputManager::scoreCollision(dots[1].getSprite(), secondHitter_) && dots[1].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit2))
 			{
 				failed = true;
 				particles_.drawTwo = false;
 			}
-			if (InputManager::scoreCollision(dots[2].sprite, thirdHitter_) && !dots[2].isHit && !dots[2].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit3))
+
+			if (InputManager::scoreCollision(dots[2].getSprite(), thirdHitter_) && !dots[2].isHit() && !dots[2].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit3))
 			{
 				combo_++;
 				currentScore += 5 + combo_;
 				particles_.drawThree = true;
-				dots[2].isHit = true;
-				dots[2].sprite.setTexture(data_->assets.getTexture("dot hit"));
+				dots[2].setHit(data_->assets.getTexture("dot hit"));
 			}
-			else if (InputManager::scoreCollision(dots[2].sprite, thirdHitter_) && dots[2].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit3))
+			else if (InputManager::scoreCollision(dots[2].getSprite(), thirdHitter_) && dots[2].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit3))
 			{
 				failed = true;
 				particles_.drawThree = false;
 			}
-			if (InputManager::scoreCollision(dots[3].sprite, fourthHitter_) && !dots[3].isHit && !dots[3].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit4))
+
+			if (InputManager::scoreCollision(dots[3].getSprite(), fourthHitter_) && !dots[3].isHit() && !dots[3].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit4))
 			{
 				combo_++;
 				currentScore += 5 + combo_;
 				particles_.drawFour = true;
-				dots[3].isHit = true;
-				dots[3].sprite.setTexture(data_->assets.getTexture("dot hit"));
+				dots[3].setHit(data_->assets.getTexture("dot hit"));
 			}
-			else if (InputManager::scoreCollision(dots[3].sprite, fourthHitter_) && dots[3].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit4))
+			else if (InputManager::scoreCollision(dots[3].getSprite(), fourthHitter_) && dots[3].hasEmptyTex() && sf::Keyboard::isKeyPressed(data_->settings.hit4))
 			{
 				failed = true;
 				particles_.drawFour = false;
@@ -184,18 +180,14 @@ void GameState::updateScore_()
 			if (failed)
 			{
 
+				sounds_.playMissSound();
 				particles_.dontDraw();
 				combo_ = 0;
-				if (playMiss_)
-				{
-					missSound_.play();
-				}
-				playMiss_ = false;
 			}
 			else if (currentScore > 0 && particles_.isBeatValid())
 			{
-				hitSound_.play();
-				playMiss_ = true;
+				sounds_.playHitSound();
+				sounds_.unblockMissSound();
 				score_ += currentScore;
 				break;
 			}
@@ -208,67 +200,66 @@ void GameState::updateScore_()
 	comboText_.setString(std::to_string(combo_) + "x");
 	comboText_.setOrigin(comboText_.getGlobalBounds().width, comboText_.getGlobalBounds().height);
 
-	if (combo_ > maxCombo_)
-	{
-		maxCombo_ = combo_;
-	}
+	if (combo_ > maxCombo_) maxCombo_ = combo_;
 }
 
 void GameState::genDots_()
 {
-	for (unsigned i = 0; i < data_->songsData.getSong().chart.firstRow.size(); i++)
+	Hitmarker tempHit1(data_->assets.getTexture("dot 1")), tempHit2(data_->assets.getTexture("dot 1")), tempHit3(data_->assets.getTexture("dot 3")), tempHit4(data_->assets.getTexture("dot 4"));
+	tempHit1.setPosition(float(data_->window.getSize().x * 0.1188), -tempHit1.getSprite().getGlobalBounds().height);
+	tempHit2.setPosition(float(data_->window.getSize().x * 0.282), -tempHit2.getSprite().getGlobalBounds().height);
+	tempHit3.setPosition(float(data_->window.getSize().x * 0.445), -tempHit3.getSprite().getGlobalBounds().height);
+	tempHit4.setPosition(float(data_->window.getSize().x * 0.607), -tempHit4.getSprite().getGlobalBounds().height);
+
+	for (unsigned i = 0; i < data_->songsData.chartLength(); i++)
 	{
-		std::vector<Hitmarker> temp;
+		std::vector<Hitmarker> tempVec;
 
-		if (data_->songsData.getSong().chart.firstRow[i] == true) {
-			Hitmarker dot1(data_->assets.getTexture("dot 1"));
-			dot1.sprite.setPosition(float(WIN_RES.x * 0.1188), -dot1.sprite.getGlobalBounds().height);
-			temp.emplace_back(dot1);
+		if (data_->songsData.getChart().firstRow[i] == true) {
+			tempHit1.setTexture(data_->assets.getTexture("dot 1"));
+			tempVec.push_back(tempHit1);
 		}
 		else
 		{
-			Hitmarker dot1(this->data_->assets.getTexture("EMPTYTEX"), true);
-			dot1.sprite.setPosition(float(WIN_RES.x * 0.1188), -dot1.sprite.getGlobalBounds().height);
-			temp.emplace_back(dot1);
+			tempHit1.setHit(this->data_->assets.getTexture("EMPTYTEX"));
+			tempVec.push_back(tempHit1);
+			tempHit1.reset();
 		}
 
-		if (data_->songsData.getSong().chart.secondRow[i] == true) {
-			Hitmarker dot2(data_->assets.getTexture("dot 2"));
-			dot2.sprite.setPosition(float(WIN_RES.x * 0.282), -dot2.sprite.getGlobalBounds().height);
-			temp.emplace_back(dot2);
+		if (data_->songsData.getChart().secondRow[i] == true) {
+			tempHit2.setTexture(data_->assets.getTexture("dot 2"));
+			tempVec.push_back(tempHit2);
 		}
 		else
 		{
-			Hitmarker dot2(this->data_->assets.getTexture("EMPTYTEX"), true);
-			dot2.sprite.setPosition(float(WIN_RES.x * 0.282), -dot2.sprite.getGlobalBounds().height);
-			temp.emplace_back(dot2);
+			tempHit2.setHit(this->data_->assets.getTexture("EMPTYTEX"));
+			tempVec.push_back(tempHit2);
+			tempHit2.reset();
 		}
 
-		if (data_->songsData.getSong().chart.thirdRow[i] == true) {
-			Hitmarker dot3(data_->assets.getTexture("dot 3"));
-			dot3.sprite.setPosition(float(WIN_RES.x * 0.445), -dot3.sprite.getGlobalBounds().height);
-			temp.emplace_back(dot3);
+		if (data_->songsData.getChart().thirdRow[i] == true) {
+			tempHit3.setTexture(data_->assets.getTexture("dot 3"));
+			tempVec.push_back(tempHit3);
 		}
 		else
 		{
-			Hitmarker dot3(this->data_->assets.getTexture("EMPTYTEX"), true);
-			dot3.sprite.setPosition(float(WIN_RES.x * 0.445), -dot3.sprite.getGlobalBounds().height);
-			temp.emplace_back(dot3);
+			tempHit3.setHit(this->data_->assets.getTexture("EMPTYTEX"));
+			tempVec.push_back(tempHit3);
+			tempHit3.reset();
 		}
 
-		if (data_->songsData.getSong().chart.fourthRow[i] == true) {
-			Hitmarker dot4(data_->assets.getTexture("dot 4"));
-			dot4.sprite.setPosition(float(WIN_RES.x * 0.607), -dot4.sprite.getGlobalBounds().height);
-			temp.emplace_back(dot4);
+		if (data_->songsData.getChart().fourthRow[i] == true) {
+			tempHit4.setTexture(data_->assets.getTexture("dot 4"));
+			tempVec.push_back(tempHit4);
 		}
 		else
 		{
-			Hitmarker dot4(this->data_->assets.getTexture("EMPTYTEX"), true);
-			dot4.sprite.setPosition(float(WIN_RES.x * 0.607), -dot4.sprite.getGlobalBounds().height);
-			temp.emplace_back(dot4);
+			tempHit4.setHit(this->data_->assets.getTexture("EMPTYTEX"));
+			tempVec.push_back(tempHit4);
+			tempHit4.reset();
 		}
 
-		chart_.emplace_back(temp);
+		chart_.emplace_back(tempVec);
 	}
 }
 
@@ -279,7 +270,7 @@ void GameState::drawDots_()
 	{
 		for (const auto& j : i)
 		{
-			data_->window.draw(j.sprite);
+			data_->window.draw(j.getSprite());
 		}
 	}
 }
@@ -287,11 +278,11 @@ void GameState::drawDots_()
 void GameState::updateDots_(const float dt)
 {
 	timeAccumulator_ += dt;
-	if (songClock_.getElapsedTime().asSeconds() + timeAccumulator_ > data_->songsData.getSong().beatDuration && !chart_.empty())
+	if (songClock_.getElapsedTime().asSeconds() + timeAccumulator_ > data_->songsData.getBeatDuration() && !chart_.empty())
 	{
+		timeAccumulator_ = 0.0f;
 		onScreen_.emplace_back(chart_[0]);
 		chart_.erase(chart_.begin());
-		timeAccumulator_ = 0.0f;
 		songClock_.restart();
 	}
 
@@ -299,20 +290,16 @@ void GameState::updateDots_(const float dt)
 	{
 		for (auto& j : i)
 		{
-			j.sprite.move(0, data_->settings.scrollSpeed);
-			if (j.sprite.getPosition().y > firstHitter_.getPosition().y + firstHitter_.getGlobalBounds().height)
+			j.getSprite().move(0, data_->settings.scrollSpeed);
+			if (j.getSprite().getPosition().y > firstHitter_.getPosition().y + firstHitter_.getGlobalBounds().height)
 			{
 				for (const auto& dot : *onScreen_.begin())
 				{
-					if (!dot.isHit)
+					if (!dot.isHit())
 					{
-						combo_ = 0;
+						sounds_.playMissSound();
 						particles_.dontDraw();
-						if (playMiss_)
-						{
-							missSound_.play();
-						}
-						playMiss_ = false;
+						combo_ = 0;
 						break;
 					}
 				}
@@ -323,7 +310,7 @@ void GameState::updateDots_(const float dt)
 	}
 }
 
-void GameState::animateHitmarkers_()
+void GameState::animateHitters_()
 {
 	if (sf::Keyboard::isKeyPressed(data_->settings.hit1))
 	{

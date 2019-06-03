@@ -3,7 +3,7 @@
 #include "AssetManager.hpp"
 #include "InputManager.hpp"
 #include "SongsData.hpp"
-#include "Misc.hpp"
+#include "Settings.hpp"
 
 struct GameData
 {
@@ -15,7 +15,6 @@ struct GameData
 	Settings settings;
 	sf::Music backgroundMusic;
 	sf::Sound transitionSound, applauseSound;
-	float currentMusicVolume{ 100.0f };
 };
 
 class Game

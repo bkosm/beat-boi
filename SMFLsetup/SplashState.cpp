@@ -29,12 +29,10 @@ SplashState::SplashState(std::shared_ptr<GameData> data) : data_(std::move(data)
 
 	data_->transitionSound.setBuffer(data_->assets.getSound("TRANSITION"));
 	data_->applauseSound.setBuffer(data_->assets.getSound("APPLAUSE"));
-	data_->transitionSound.setVolume(50.f);
-	data_->applauseSound.setVolume(35.f);
+	data_->transitionSound.setVolume(data_->settings.applauseVolume);
+	data_->applauseSound.setVolume(data_->settings.transitionVolume);
 
 	bg_.setTexture(data_->assets.getTexture("splash bg"));
-	data_->window.draw(bg_);
-	data_->window.display();
 
 	data_->backgroundMusic.openFromFile(SPLASH_MUSIC_PATH);
 	data_->backgroundMusic.setLoop(true);
@@ -50,36 +48,39 @@ void SplashState::handleInput()
 		{
 			data_->window.close();
 		}
-
 		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space)
 		{
 			data_->transitionSound.play();
 			data_->maschine.removeState();
 			data_->maschine.addState(std::make_unique<MainMenuState>(data_), true);
 		}
-
 		if (event.type == sf::Event::KeyPressed && event.key.code == data_->settings.volumeDown)
 		{
-			data_->currentMusicVolume -= 10.0f;
-			if (data_->currentMusicVolume < 0)
+			data_->settings.currentMusicVolume -= 10.0f;
+			if (data_->settings.currentMusicVolume < 0)
 			{
-				data_->currentMusicVolume = 0;
+				data_->settings.currentMusicVolume = 0;
 			}
-			data_->backgroundMusic.setVolume(data_->currentMusicVolume);
+			data_->backgroundMusic.setVolume(data_->settings.currentMusicVolume);
 
 		}
 		if (event.type == sf::Event::KeyPressed && event.key.code == data_->settings.volumeUp)
 		{
-			data_->currentMusicVolume += 10.0f;
-			if (data_->currentMusicVolume > 100)
+			data_->settings.currentMusicVolume += 10.0f;
+			if (data_->settings.currentMusicVolume > 100)
 			{
-				data_->currentMusicVolume = 100;
+				data_->settings.currentMusicVolume = 100;
 			}
-			data_->backgroundMusic.setVolume(data_->currentMusicVolume);
+			data_->backgroundMusic.setVolume(data_->settings.currentMusicVolume);
 		}
 	}
 }
 
 void SplashState::update(const float dt) {}
 
-void SplashState::draw() {}
+void SplashState::draw()
+{
+	data_->window.clear();
+	data_->window.draw(bg_);
+	data_->window.display();
+}

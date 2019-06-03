@@ -18,36 +18,36 @@ EndGameState::EndGameState(std::shared_ptr<GameData> data, std::string songName,
 	scoreText_.setCharacterSize(25);
 	scoreText_.setFillColor(sf::Color::White);
 	scoreText_.setOrigin(scoreText_.getGlobalBounds().width, 0);
-	scoreText_.setPosition(float(WIN_RES.x * 0.95), float(WIN_RES.y * 0.14));
+	scoreText_.setPosition(float(data_->window.getSize().x * 0.95), float(data_->window.getSize().y * 0.14));
 
 	comboText_.setFont(data_->assets.getFont("MAIN"));
 	comboText_.setString(std::to_string(combo_));
 	comboText_.setCharacterSize(25);
 	comboText_.setFillColor(sf::Color::White);
 	comboText_.setOrigin(comboText_.getGlobalBounds().width, 0);
-	comboText_.setPosition(float(WIN_RES.x * 0.95), float(WIN_RES.y * 0.23));
+	comboText_.setPosition(float(data_->window.getSize().x * 0.95), float(data_->window.getSize().y * 0.23));
 
 	bestScoreText_.setFont(data_->assets.getFont("MAIN"));
 	bestScoreText_.setString(bestScore_);
 	bestScoreText_.setCharacterSize(25);
 	bestScoreText_.setFillColor(sf::Color::White);
 	bestScoreText_.setOrigin(bestScoreText_.getGlobalBounds().width, 0);
-	bestScoreText_.setPosition(float(WIN_RES.x * 0.7), float(WIN_RES.y * 0.435));
+	bestScoreText_.setPosition(float(data_->window.getSize().x * 0.7), float(data_->window.getSize().y * 0.435));
 
 	bestComboText_.setFont(data_->assets.getFont("MAIN"));
 	bestComboText_.setString(bestCombo_);
 	bestComboText_.setCharacterSize(25);
 	bestComboText_.setFillColor(sf::Color::White);
 	bestComboText_.setOrigin(bestComboText_.getGlobalBounds().width, 0);
-	bestComboText_.setPosition(float(WIN_RES.x * 0.7), float(WIN_RES.y * 0.523));
+	bestComboText_.setPosition(float(data_->window.getSize().x * 0.7), float(data_->window.getSize().y * 0.523));
 
 	restart_.setSize(sf::Vector2f(400, 40));
 	restart_.setFillColor(sf::Color::Transparent);
-	restart_.setPosition(float(WIN_RES.x * 0.01), float(WIN_RES.y * 0.7));
+	restart_.setPosition(float(data_->window.getSize().x * 0.01), float(data_->window.getSize().y * 0.7));
 
 	exit_.setSize(sf::Vector2f(400, 40));
 	exit_.setFillColor(sf::Color::Transparent);
-	exit_.setPosition(float(WIN_RES.x * 0.01), float(WIN_RES.y * 0.8));
+	exit_.setPosition(float(data_->window.getSize().x * 0.01), float(data_->window.getSize().y * 0.8));
 }
 
 void EndGameState::handleInput()
@@ -61,7 +61,6 @@ void EndGameState::handleInput()
 			data_->window.close();
 		}
 	}
-
 	if (InputManager::isShapeClicked(restart_, sf::Mouse::Left, data_->window) && !clicked_ || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && !clicked_)
 	{
 		clicked_ = true;
@@ -117,14 +116,13 @@ void EndGameState::processBestScore_()
 				{
 					if (std::stoi(match.str(2)) > 10000)
 					{
-						bestScore_ = "Yeah";
 						bestCombo_ = "OFC";
 					}
 					else
 					{
-						bestScore_ = match.str(1);
 						bestCombo_ = match.str(2);
 					}
+					bestScore_ = match.str(1);
 				}
 				else //Overwrite highscore
 				{
@@ -154,7 +152,7 @@ void EndGameState::processBestScore_()
 			}
 			else //New highscore
 			{
-				bestScore_ = "NEW";
+				bestScore_ = "CURRENTLY";
 				bestCombo_ = "BEST!";
 				std::ofstream output("./data/scores.bb", std::ios::app);
 				if (output.is_open())

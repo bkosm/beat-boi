@@ -3,15 +3,8 @@
 struct SongChart
 {
 	std::vector<bool> firstRow, secondRow, thirdRow, fourthRow;
-};
 
-struct Song
-{
-	SongChart chart;
-	sf::Music music;
-	sf::SoundBuffer hitSound, missSound;
-	float bpm{}, beatDuration{};
-	bool loaded = false;
+	void clearChart();
 };
 
 class SongsData
@@ -21,12 +14,25 @@ public:
 	~SongsData() = default;
 
 	void unloadSong();
+
+	SongChart& getChart();
+	sf::Music& getMusic();
+	const sf::SoundBuffer& getHitSound() const;
+	const sf::SoundBuffer& getMissSound() const;
+
 	bool loadSong(const std::string& songName);
-	Song& getSong();
+	unsigned chartLength() const;
+	float getBeatDuration() const;
+	float getBPM() const;
 
 private:
-	Song song_;
-	float offset_{};
+	SongChart chart_;
+	
+	sf::Music music_;
+	sf::SoundBuffer hitSound_, missSound_;
+	
+	float bpm_{}, beatDuration_{}, offset_{};
+	bool loaded_ = false;
 
 	void readOffset_();
 };

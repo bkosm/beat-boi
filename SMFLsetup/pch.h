@@ -21,7 +21,9 @@
 #include "InputManager.hpp"
 #include "SongsData.hpp"
 #include "HitParticles.hpp"
-#include "Misc.hpp"
+#include "GameSounds.hpp"
+#include "Settings.hpp"
+#include "Hitmarker.hpp"
 
 #include "SplashState.hpp"
 #include "MainMenuState.hpp"
