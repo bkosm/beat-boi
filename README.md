@@ -20,7 +20,7 @@ To create your own maps simply create a folder in the **"./data/songs/"** direct
 * Your song in **".wav"** format as **"music.wav"**.
 * A dot hitting sound in the same format as **"hitsound.wav"**.
 * A hit missing sound also in **".wav"** as **"misssound.wav"**.
-* A "data.bin" file which contains the tempo of the song in the first line (in BPM) and a boolean chart of the map.
+* A **"data.bin"** file which contains the tempo of the song in the first line (in BPM) and a boolean chart of the map.
 
 For reference look up to provided examples.
 
