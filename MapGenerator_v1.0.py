@@ -20,39 +20,41 @@ def main():
     isHarder = False
     isEasier = False
     if bpm <= 100:
-        check = int(input(
-            'Do you want to generate a harder map? (type \'0\' for easy or \'1\' for hard): '))
-        if check is 1:
+        check = input(
+            'Do you want to generate a easy or hard map? (type \"e\" for easy or \"h\" for hard): ')
+        if check is 'h':
             isHarder = True
-    if bpm >= 130:
-        check = int(input(
-            'Do you want to generate an easier map? (type \'0\' for easy or \'1\' for hard): '))
-        if check is 0:
+    elif bpm >= 130:
+        check = input(
+            'Do you want to generate a easy or hard map? (type \"e\" for easy or \"h\" for hard): ')
+        if check is 'e':
             isEasier = True
 
     if isEasier:
         bpm = int(bpm/2)
-
-    if isHarder:
+    elif isHarder:
         bpm = int(bpm*2)
 
     songDuration = int(int(songDurationMinutes)*60 +
                        (songDurationMinutes-int(songDurationMinutes))*100)
-    numberOfBeats = int(songDuration*bpm/30) - 15
+    numberOfBeats = int(songDuration*bpm/15) - 10
 
-    map = open(file='data.bin', mode='w')
-    map.write(str(bpm))
+    try:
+        map = open(file='data.bin', mode='w')
+        map.write(str(bpm))
 
-    for i in range(0, numberOfBeats):
-        bar = ""
-        for j in range(4):
-            if dotExists(probability):
-                bar += '1'
-            else:
-                bar += '0'
-        map.write('\n'+bar)
+        for i in range(numberOfBeats):
+            bar = ""
+            for j in range(4):
+                if dotExists(probability):
+                    bar += '1'
+                else:
+                    bar += '0'
+            map.write('\n'+bar)
 
-    map.close()
+        map.close()
+    except:
+        print('Couldnt open \"data.bin\" file.')
 
 
 main()
