@@ -40,9 +40,9 @@ void KeyBindingState::handleInput()
 		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right)
 		{
 			data_->settings.scrollSpeed++;
-			if (data_->settings.scrollSpeed > 15)
+			if (data_->settings.scrollSpeed > MAX_SCROLL_SPEED)
 			{
-				data_->settings.scrollSpeed = 15;
+				data_->settings.scrollSpeed = MAX_SCROLL_SPEED;
 			}
 		}
 		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R)

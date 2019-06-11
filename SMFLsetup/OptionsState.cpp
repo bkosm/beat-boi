@@ -6,7 +6,7 @@ OptionsState::OptionsState(std::shared_ptr<GameData> data, std::string songName)
 {
 	bg_.setTexture(data_->assets.getTexture("options bg"));
 
-	data_->settings.minumumScrollSpeed = unsigned(data_->songsData.getBPM() / 18 + 1);
+	data_->settings.minumumScrollSpeed = unsigned(data_->songsData.getBPM() / 36 + 1);
 	data_->settings.scrollSpeed = data_->settings.minumumScrollSpeed;
 
 	play_.setSize(sf::Vector2f(400, 25));

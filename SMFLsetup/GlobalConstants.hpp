@@ -2,9 +2,10 @@
 
 const sf::Vector2u WIN_RES{ 720,480 };
 
-const float FRAMERATE = 1.f / 60.f;
-const unsigned NMBR_OF_PARTICLES = 450;
-
+const float FRAMERATE = 1.f / 120.f;
+const unsigned NMBR_OF_PARTICLES = 100;
+const unsigned MAX_SCROLL_SPEED = 10;
+ 
 const std::string SPLASH_MUSIC_PATH = "./resources/audio/SPLASH_MUSIC.wav";
 const std::string TRANSITION_SOUND_PATH = "./resources/audio/TRANSITION_SOUND.wav";
 const std::string APPLAUSE_SOUND_PATH = "./resources/audio/APPLAUSE_SOUND.wav";

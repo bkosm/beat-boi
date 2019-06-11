@@ -18,7 +18,7 @@ void Settings::resetSettings()
 	hit4 = sf::Keyboard::Key::Slash;
 	volumeUp = sf::Keyboard::Key::Equal;
 	volumeDown = sf::Keyboard::Key::Hyphen;
-	scrollSpeed = 5;
+	scrollSpeed = 3;
 	hitSoundVolume = 8.f;
 	missSoundVolume = 7.f;
 	transitionVolume = 50.0f;
